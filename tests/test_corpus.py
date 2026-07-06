@@ -3,7 +3,7 @@
 Requires tests/corpus/ to be populated: run `python scripts/fetch_corpus.py`.
 """
 
-from functools import lru_cache
+from functools import cache
 from pathlib import Path
 
 import pytest
@@ -19,7 +19,7 @@ pytestmark = pytest.mark.skipif(
 )
 
 
-@lru_cache(maxsize=None)
+@cache
 def load(filename: str) -> Device:
     return parse_svd(CORPUS / filename)
 
