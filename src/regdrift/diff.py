@@ -98,24 +98,31 @@ def _diff_level(
     parent_path: str,
     changes: list[Change],
 ) -> None:
-    old_by_name: dict[tuple[str, str], _Item] = {}
+    # Phase 1+2: exact name pairing (address diffs become "moved" in compare).
+    # Names are usually unique per level, but real vendor files repeat names
+    # (e.g. several RESERVED fields in one register), so same-named groups are
+    # paired by exact offset first, then positionally.
+    old_groups: dict[tuple[str, str], list[_Item]] = {}
     for item in old_items:
-        old_by_name.setdefault((_element_of(item), item.name), item)
-    new_by_name: dict[tuple[str, str], _Item] = {}
+        old_groups.setdefault((_element_of(item), item.name), []).append(item)
+    new_groups: dict[tuple[str, str], list[_Item]] = {}
     for item in new_items:
-        new_by_name.setdefault((_element_of(item), item.name), item)
+        new_groups.setdefault((_element_of(item), item.name), []).append(item)
 
     unmatched_old: list[_Item] = []
-    # Phase 1+2: exact name pairing (address diffs become "moved" in compare).
-    for item in old_items:
-        partner = new_by_name.get((_element_of(item), item.name))
-        if partner is not None:
-            _compare(item, partner, parent_path, changes)
-        else:
-            unmatched_old.append(item)
-    unmatched_new: list[_Item] = [
-        item for item in new_items if (_element_of(item), item.name) not in old_by_name
-    ]
+    unmatched_new: list[_Item] = []
+    for key, old_group in old_groups.items():
+        new_group = new_groups.get(key, [])
+        pairs = _pair_same_name(old_group, new_group)
+        for o, n in pairs:
+            _compare(o, n, parent_path, changes)
+        paired_old = {id(o) for o, _ in pairs}
+        paired_new = {id(n) for _, n in pairs}
+        unmatched_old.extend(o for o in old_group if id(o) not in paired_old)
+        unmatched_new.extend(n for n in new_group if id(n) not in paired_new)
+    for key, new_group in new_groups.items():
+        if key not in old_groups:
+            unmatched_new.extend(new_group)
 
     # Phase 3: rename heuristic on the leftovers — identical offset and
     # structure, and unambiguous (exactly one candidate on each side).
@@ -130,8 +137,8 @@ def _diff_level(
     new_keyed = keyed(unmatched_new)
     renamed_old: set[int] = set()
     renamed_new: set[int] = set()
-    for key, old_group in old_keyed.items():
-        new_group = new_keyed.get(key, [])
+    for sig_key, old_group in old_keyed.items():
+        new_group = new_keyed.get(sig_key, [])
         if len(old_group) == 1 and len(new_group) == 1:
             o, n = old_group[0], new_group[0]
             confidence = 1.0 if o.description == n.description else 0.8
@@ -163,6 +170,24 @@ def _diff_level(
             changes.append(
                 Change(kind="added", element=_element_of(item), path=_join(parent_path, item.name))
             )
+
+
+def _pair_same_name(
+    old_group: list[_Item], new_group: list[_Item]
+) -> list[tuple[_Item, _Item]]:
+    """Pair same-named items: exact offset match first, then by position."""
+    pairs: list[tuple[_Item, _Item]] = []
+    new_free = list(new_group)
+    old_free: list[_Item] = []
+    for o in old_group:
+        match = next((n for n in new_free if _offset_of(n) == _offset_of(o)), None)
+        if match is not None:
+            pairs.append((o, match))
+            new_free.remove(match)
+        else:
+            old_free.append(o)
+    pairs.extend(zip(old_free, new_free, strict=False))
+    return pairs
 
 
 def _join(parent: str, name: str) -> str:
