@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Environments
+.venv/
+
+# Tool caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Test corpus: real vendor SVDs, fetched by scripts/fetch_corpus.py
+tests/corpus/
+
+# Editor/tool droppings
+.vigil/
