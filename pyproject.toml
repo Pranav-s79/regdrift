@@ -1,0 +1,67 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "regdrift"
+description = "Diff two CMSIS-SVD register maps and classify changes as BREAKING/WARNING/SAFE."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
+authors = [{ name = "Pranav Senthilkumar", email = "pranav.senthilkumar79@gmail.com" }]
+dependencies = ["click>=8.1"]
+dynamic = ["version"]
+keywords = ["svd", "cmsis", "registers", "embedded", "diff", "breaking-change", "ci"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Embedded Systems",
+    "Topic :: Software Development :: Quality Assurance",
+]
+
+[project.urls]
+Homepage = "https://github.com/Pranav-s79/regdrift"
+Issues = "https://github.com/Pranav-s79/regdrift/issues"
+
+[project.scripts]
+regdrift = "regdrift.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.5", "mypy>=1.10"]
+
+[tool.hatch.version]
+path = "src/regdrift/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/regdrift"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["src", "tests", "scripts"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "SIM", # flake8-simplify
+]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+mypy_path = "src"
+packages = ["regdrift"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
