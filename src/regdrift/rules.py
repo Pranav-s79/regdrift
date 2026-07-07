@@ -34,12 +34,22 @@ class Finding:
     allowed: bool = False
 
 
-def classify_changes(changes: list[Change], allow: list[str] | None = None) -> list[Finding]:
-    """Classify every change; entries matching the allowlist become ALLOWED."""
+def classify_changes(
+    changes: list[Change],
+    allow: list[str] | None = None,
+    severity_overrides: dict[str, str] | None = None,
+) -> list[Finding]:
+    """Classify every change.
+
+    ``severity_overrides`` re-ranks whole rules (RDxxx -> severity); entries
+    matching the allowlist become ALLOWED and win over any override.
+    """
     allow_entries = [_parse_allow(entry) for entry in (allow or [])]
     findings = []
     for change in changes:
         finding = _classify(change)
+        if severity_overrides and finding.rule_id in severity_overrides:
+            finding.severity = severity_overrides[finding.rule_id]
         if any(_allows(rule, path, finding) for rule, path in allow_entries):
             finding.allowed = True
             finding.severity = ALLOWED

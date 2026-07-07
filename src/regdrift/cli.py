@@ -8,7 +8,7 @@ from pathlib import Path
 import click
 
 from regdrift import __version__
-from regdrift.config import ConfigError, load_allowlist
+from regdrift.config import ConfigError, load_config
 from regdrift.diff import diff_devices
 from regdrift.model import Cluster, Device, Register, device_to_dict
 from regdrift.parse import SvdParseError, parse_svd
@@ -84,13 +84,17 @@ def check(
       2  tool error (unreadable file, malformed SVD, bad config)
     """
     try:
-        allow = load_allowlist(config_path) + list(allow_flags)
+        config = load_config(config_path)
         old = parse_svd(old_svd)
         new = parse_svd(new_svd)
     except (ConfigError, SvdParseError) as exc:
         click.echo(f"error: {exc}", err=True)
         sys.exit(2)
-    findings = classify_changes(diff_devices(old, new), allow=allow)
+    findings = classify_changes(
+        diff_devices(old, new),
+        allow=config.allow + list(allow_flags),
+        severity_overrides=config.severity_overrides,
+    )
     for f in findings:
         click.echo(f"{f.severity:<9} {f.rule_id}  {f.message}")
     counts = {sev: 0 for sev in (BREAKING, WARNING, SAFE, ALLOWED)}
