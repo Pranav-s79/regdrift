@@ -966,6 +966,13 @@
      "kind": "register"
     }
    ],
+   "interrupts": [
+    {
+     "name": "TIMER0",
+     "value": 0,
+     "description": null
+    }
+   ],
    "dim": null
   },
   {
@@ -1929,6 +1936,13 @@
      "kind": "register"
     }
    ],
+   "interrupts": [
+    {
+     "name": "TIMER1",
+     "value": 4,
+     "description": null
+    }
+   ],
    "dim": null
   },
   {
@@ -2890,6 +2904,13 @@
       "index": "3"
      },
      "kind": "register"
+    }
+   ],
+   "interrupts": [
+    {
+     "name": "TIMER2",
+     "value": 6,
+     "description": null
     }
    ],
    "dim": null

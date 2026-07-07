@@ -74,12 +74,22 @@ class Cluster:
 
 
 @dataclass
+class Interrupt:
+    """An interrupt line a peripheral raises; value is the NVIC/vector number."""
+
+    name: str
+    value: int
+    description: str | None = None
+
+
+@dataclass
 class Peripheral:
     name: str
     base_address: int
     description: str | None = None
     group_name: str | None = None
     children: list[Register | Cluster] = field(default_factory=list)
+    interrupts: list[Interrupt] = field(default_factory=list)
     dim: DimInfo | None = None
 
 

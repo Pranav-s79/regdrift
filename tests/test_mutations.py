@@ -181,6 +181,19 @@ def set_protection(dev: Device) -> tuple[str, str]:
     return "RD014", path
 
 
+def renumber_interrupt(dev: Device) -> tuple[str, str]:
+    p = next(p for p in dev.peripherals if p.interrupts)
+    irq = p.interrupts[0]
+    irq.value += 100
+    return "RD015", f"{p.name}.{irq.name}"
+
+
+def remove_interrupt(dev: Device) -> tuple[str, str]:
+    p = next(p for p in dev.peripherals if p.interrupts)
+    irq = p.interrupts.pop(0)
+    return "RD016", f"{p.name}.{irq.name}"
+
+
 def add_register(dev: Device) -> tuple[str, str]:
     p = dev.peripherals[0]
     p.children.append(Register(name="REGDRIFT_NEW", address_offset=0xFFC, size=32))
@@ -215,6 +228,8 @@ MUTATIONS: dict[str, Mutation] = {
     "change_reset_mask": change_reset_mask,
     "remove_enum_value": remove_enum_value,
     "set_protection": set_protection,
+    "renumber_interrupt": renumber_interrupt,
+    "remove_interrupt": remove_interrupt,
     "add_register": add_register,
     "grant_write_access": grant_write_access,
     "change_description": change_description,

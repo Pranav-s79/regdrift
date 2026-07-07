@@ -86,6 +86,8 @@ def _classify(c: Change) -> Finding:
             return finding("RD008", BREAKING, f"field {c.path} removed")
         if c.element == "enum":
             return finding("RD013", WARNING, f"enumerated value {c.path} removed")
+        if c.element == "interrupt":
+            return finding("RD016", BREAKING, f"interrupt {c.path} removed")
         return finding("RD002", BREAKING, f"{c.element} {c.path} removed")
 
     if c.kind == "moved":
@@ -111,6 +113,12 @@ def _classify(c: Change) -> Finding:
     # kind == "modified"
     if c.attribute == "description":
         return finding("RD030", SAFE, f"{c.element} {c.path} description changed")
+    if c.element == "interrupt":
+        return finding(
+            "RD015",
+            BREAKING,
+            f"interrupt {c.path} renumbered {c.before} -> {c.after}",
+        )
     if c.element == "enum":
         return finding(
             "RD011",

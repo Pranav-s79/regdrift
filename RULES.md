@@ -25,6 +25,8 @@ reported as **ALLOWED** and never fail the check.
 | RD007 | Peripheral removed | An entire address block of the API disappears. |
 | RD008 | Field removed | Field-level accessors disappear from generated code; hand-rolled masks lose meaning. |
 | RD009 | Register size changed | Load/store width no longer matches the hardware; reads can fault or truncate. |
+| RD015 | Interrupt renumbered | The vector-table slot moves; old code installs its handler in the wrong entry and NVIC calls target the wrong line. |
+| RD016 | Interrupt removed | Generated vector tables and IRQ enums lose the entry; handler registration silently dangles. |
 
 ## WARNING
 

@@ -32,6 +32,7 @@ from regdrift.model import (
     DimInfo,
     EnumeratedValue,
     Field,
+    Interrupt,
     Peripheral,
     Register,
 )
@@ -58,12 +59,16 @@ class _Node:
     props: dict[str, str] = dc_field(default_factory=dict)
     derived_from: str | None = None
     children: list["_Node"] = dc_field(default_factory=list, repr=False)
+    # peripheral-only: <interrupt> elements, kept apart from `children` so
+    # that a derived peripheral defining an interrupt (but no registers)
+    # still inherits the base's registers wholesale
+    interrupts: list["_Node"] = dc_field(default_factory=list, repr=False)
     parent: "_Node | None" = dc_field(default=None, repr=False, compare=False)
 
 
 # Which child *element* tags each node kind owns (everything else with no
 # sub-elements is treated as a simple text prop; unknown complex elements
-# like <interrupt> or <addressBlock> are ignored).
+# like <addressBlock> or <writeConstraint> are ignored).
 _CHILD_TAGS: dict[str, frozenset[str]] = {
     "device": frozenset({"peripheral"}),
     "peripheral": frozenset({"register", "cluster"}),
@@ -72,6 +77,7 @@ _CHILD_TAGS: dict[str, frozenset[str]] = {
     "field": frozenset({"enumeratedValues"}),
     "enumeratedValues": frozenset({"enumeratedValue"}),
     "enumeratedValue": frozenset(),
+    "interrupt": frozenset(),
 }
 
 # Transparent grouping wrappers, per parent tag.
@@ -107,11 +113,15 @@ def _raw_node(el: ET.Element, tag: str, parent_path: str, index: int) -> _Node:
             if ctag in child_tags:
                 count += 1
                 node.children.append(_raw_node(child, ctag, container_path, count))
+            elif tag == "peripheral" and ctag == "interrupt":
+                node.interrupts.append(
+                    _raw_node(child, "interrupt", container_path, len(node.interrupts) + 1)
+                )
             elif ctag in wrappers:
                 consume(child, f"{container_path}/{ctag}")
             elif len(child) == 0:
                 node.props[ctag] = (child.text or "").strip()
-            # complex elements we don't model (interrupt, addressBlock, cpu,
+            # complex elements we don't model (addressBlock, cpu,
             # writeConstraint, dimArrayIndex, ...) are skipped
 
     consume(el, node.path)
@@ -155,6 +165,10 @@ class _Resolver:
                     node.children = [
                         self._clone(c, node, base.path, node.path) for c in base.children
                     ]
+                if not node.interrupts and base.interrupts:
+                    node.interrupts = [
+                        self._clone(i, node, base.path, node.path) for i in base.interrupts
+                    ]
                 # The bit-range props form one exclusive group: a derived
                 # field that defines its own range (in any of the three
                 # styles) must not inherit pieces of the base's style, or
@@ -181,6 +195,7 @@ class _Resolver:
             parent=parent,
         )
         new.children = [self._clone(c, new, old_prefix, new_prefix) for c in node.children]
+        new.interrupts = [self._clone(i, new, old_prefix, new_prefix) for i in node.interrupts]
         return new
 
     def _lookup(self, ref: str, node: _Node) -> _Node:
@@ -475,6 +490,19 @@ def _build_children(node: _Node, inherited: _RegProps) -> list[Register | Cluste
     return children
 
 
+def _build_interrupts(node: _Node) -> list[Interrupt]:
+    interrupts = []
+    for inode in node.interrupts:
+        interrupts.append(
+            Interrupt(
+                name=_req(inode.props, "name", inode.path),
+                value=_to_int(_req(inode.props, "value", inode.path), "value", inode.path),
+                description=inode.props.get("description") or None,
+            )
+        )
+    return interrupts
+
+
 def _build_peripherals(node: _Node, inherited: _RegProps) -> list[Peripheral]:
     props = node.props
     own = _overlay(inherited, props, node.path)
@@ -488,6 +516,7 @@ def _build_peripherals(node: _Node, inherited: _RegProps) -> list[Peripheral]:
                 description=props.get("description") or None,
                 group_name=props.get("groupName") or None,
                 children=_build_children(node, own),
+                interrupts=_build_interrupts(node),
                 dim=dim_info,
             )
         )

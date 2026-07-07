@@ -26,6 +26,7 @@ from regdrift.model import (
     Device,
     EnumeratedValue,
     Field,
+    Interrupt,
     Peripheral,
     Register,
 )
@@ -190,6 +191,81 @@ def _pair_same_name(
     return pairs
 
 
+def _diff_interrupts(
+    old_ints: list[Interrupt],
+    new_ints: list[Interrupt],
+    parent_path: str,
+    changes: list[Change],
+) -> None:
+    # Group-lists by name (never a collapsing dict — see _diff_enums); within
+    # a name group, pair equal vector values first, then positionally.
+    old_groups: dict[str, list[Interrupt]] = {}
+    for i in old_ints:
+        old_groups.setdefault(i.name, []).append(i)
+    new_groups: dict[str, list[Interrupt]] = {}
+    for i in new_ints:
+        new_groups.setdefault(i.name, []).append(i)
+
+    for name, old_group in old_groups.items():
+        path = _join(parent_path, name)
+        new_group = new_groups.get(name, [])
+        new_free = list(new_group)
+        old_free: list[Interrupt] = []
+        for o in old_group:
+            match = next((n for n in new_free if n.value == o.value), None)
+            if match is not None:
+                new_free.remove(match)
+                if o.description != match.description:
+                    changes.append(
+                        Change(
+                            kind="modified",
+                            element="interrupt",
+                            path=path,
+                            attribute="description",
+                            before=o.description,
+                            after=match.description,
+                        )
+                    )
+            else:
+                old_free.append(o)
+        for o, n in zip(old_free, new_free, strict=False):
+            changes.append(
+                Change(
+                    kind="modified",
+                    element="interrupt",
+                    path=path,
+                    attribute="value",
+                    before=o.value,
+                    after=n.value,
+                )
+            )
+            if o.description != n.description:
+                changes.append(
+                    Change(
+                        kind="modified",
+                        element="interrupt",
+                        path=path,
+                        attribute="description",
+                        before=o.description,
+                        after=n.description,
+                    )
+                )
+        changes.extend(
+            Change(kind="removed", element="interrupt", path=path)
+            for _ in old_free[len(new_free):]
+        )
+        changes.extend(
+            Change(kind="added", element="interrupt", path=path)
+            for _ in new_free[len(old_free):]
+        )
+    for name, new_group in new_groups.items():
+        if name not in old_groups:
+            path = _join(parent_path, name)
+            changes.extend(
+                Change(kind="added", element="interrupt", path=path) for _ in new_group
+            )
+
+
 def _pair_enum_group(
     old_group: list[EnumeratedValue], new_group: list[EnumeratedValue]
 ) -> tuple[
@@ -249,6 +325,7 @@ def _compare(old: _Item, new: _Item, parent_path: str, changes: list[Change]) ->
             modified("base_address", old.base_address, new.base_address, kind="moved")
         if old.description != new.description:
             modified("description", old.description, new.description)
+        _diff_interrupts(old.interrupts, new.interrupts, path, changes)
         _diff_level(old.children, new.children, path, changes)
         return
 
