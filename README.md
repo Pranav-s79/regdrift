@@ -68,6 +68,18 @@ if your toolchain never generates enum types).
     regdrift check /tmp/base.svd chip.svd --format github
 ```
 
+Or use the bundled action - same check, plus annotations and a sticky PR comment:
+
+```yaml
+- uses: actions/checkout@v4
+  with: { fetch-depth: 0 }
+- uses: Pranav-s79/regdrift@main
+  with:
+    svd-path: chip.svd
+```
+
+Pin `@main` to a release tag once v0.1.0-alpha ships. Requires `fetch-depth: 0` and, for the comment, `permissions: pull-requests: write`.
+
 ## Related tools
 
 [svdtools](https://github.com/rust-embedded/svdtools) `htmlcompare` renders
