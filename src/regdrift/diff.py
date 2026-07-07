@@ -256,11 +256,15 @@ def _diff_enums(
     parent_path: str,
     changes: list[Change],
 ) -> None:
-    old_by_name = {e.name: e for e in old_enums}
-    new_by_name = {e.name: e for e in new_enums}
-    for name, old_e in old_by_name.items():
-        path = _join(parent_path, name)
-        new_e = new_by_name.get(name)
+    # Keyed by (usage, name): a field may carry separate read and write
+    # enumeratedValues containers with same-named entries, and those must
+    # diff independently (keying by name alone silently drops one side).
+    # A container-usage flip therefore reads as removed+added.
+    old_by_key = {(e.usage, e.name): e for e in old_enums}
+    new_by_key = {(e.usage, e.name): e for e in new_enums}
+    for key, old_e in old_by_key.items():
+        path = _join(parent_path, old_e.name)
+        new_e = new_by_key.get(key)
         if new_e is None:
             changes.append(Change(kind="removed", element="enum", path=path))
             continue
@@ -270,7 +274,6 @@ def _diff_enums(
             ("value", old_value, new_value),
             ("description", old_e.description, new_e.description),
             ("is_default", old_e.is_default, new_e.is_default),
-            ("usage", old_e.usage, new_e.usage),
         ):
             if before != after:
                 changes.append(
@@ -283,6 +286,8 @@ def _diff_enums(
                         after=after,
                     )
                 )
-    for name in new_by_name:
-        if name not in old_by_name:
-            changes.append(Change(kind="added", element="enum", path=_join(parent_path, name)))
+    for key, new_e in new_by_key.items():
+        if key not in old_by_key:
+            changes.append(
+                Change(kind="added", element="enum", path=_join(parent_path, new_e.name))
+            )

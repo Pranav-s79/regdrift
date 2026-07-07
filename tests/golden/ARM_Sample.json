@@ -34,7 +34,7 @@
          "raw_value": "0",
          "description": "Timer is disabled and does not operate",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Enable",
@@ -42,7 +42,7 @@
          "raw_value": "1",
          "description": "Timer is enabled and can operate",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -60,7 +60,7 @@
          "raw_value": "0",
          "description": "Write as ZERO if necessary",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Reset_Timer",
@@ -68,7 +68,7 @@
          "raw_value": "1",
          "description": "Reset the Timer",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -86,7 +86,7 @@
          "raw_value": "0",
          "description": "Timer Counts UO and wraps, if no STOP condition is set",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Count_DOWN",
@@ -94,7 +94,7 @@
          "raw_value": "1",
          "description": "Timer Counts DOWN and wraps, if no STOP condition is set",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Toggle",
@@ -102,7 +102,7 @@
          "raw_value": "2",
          "description": "Timer Counts up to MAX, then DOWN to ZERO, if no STOP condition is set",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -120,7 +120,7 @@
          "raw_value": "0",
          "description": "Timer runs continously",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Single_ZERO_MAX",
@@ -128,7 +128,7 @@
          "raw_value": "1",
          "description": "Timer counts to 0x00 or 0xFFFFFFFF (depending on CNT) and stops",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Single_MATCH",
@@ -136,7 +136,7 @@
          "raw_value": "2",
          "description": "Timer counts to the Value of MATCH Register and stops",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Reload_ZERO_MAX",
@@ -144,7 +144,7 @@
          "raw_value": "3",
          "description": "Timer counts to 0x00 or 0xFFFFFFFF (depending on CNT), loads the RELOAD Value and continues",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Reload_MATCH",
@@ -152,7 +152,7 @@
          "raw_value": "4",
          "description": "Timer counts to the Value of MATCH Register, loads the RELOAD Value and continues",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -170,7 +170,7 @@
          "raw_value": "0",
          "description": "Prescaler is not used",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Enabled",
@@ -178,7 +178,7 @@
          "raw_value": "1",
          "description": "Prescaler is used as divider",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -196,7 +196,7 @@
          "raw_value": "0",
          "description": "Capture Source is used directly",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div2",
@@ -204,7 +204,7 @@
          "raw_value": "1",
          "description": "Capture Source is divided by 2",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div4",
@@ -212,7 +212,7 @@
          "raw_value": "2",
          "description": "Capture Source is divided by 4",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div8",
@@ -220,7 +220,7 @@
          "raw_value": "3",
          "description": "Capture Source is divided by 8",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div16",
@@ -228,7 +228,7 @@
          "raw_value": "4",
          "description": "Capture Source is divided by 16",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div32",
@@ -236,7 +236,7 @@
          "raw_value": "5",
          "description": "Capture Source is divided by 32",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div64",
@@ -244,7 +244,7 @@
          "raw_value": "6",
          "description": "Capture Source is divided by 64",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div128",
@@ -252,7 +252,7 @@
          "raw_value": "7",
          "description": "Capture Source is divided by 128",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div256",
@@ -260,7 +260,7 @@
          "raw_value": "8",
          "description": "Capture Source is divided by 256",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -278,7 +278,7 @@
          "raw_value": "0",
          "description": "Core Clock",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_0",
@@ -286,7 +286,7 @@
          "raw_value": "1",
          "description": "GPIO A, PIN 0",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_1",
@@ -294,7 +294,7 @@
          "raw_value": "2",
          "description": "GPIO A, PIN 1",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_2",
@@ -302,7 +302,7 @@
          "raw_value": "3",
          "description": "GPIO A, PIN 2",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_3",
@@ -310,7 +310,7 @@
          "raw_value": "4",
          "description": "GPIO A, PIN 3",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_4",
@@ -318,7 +318,7 @@
          "raw_value": "5",
          "description": "GPIO A, PIN 4",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_5",
@@ -326,7 +326,7 @@
          "raw_value": "6",
          "description": "GPIO A, PIN 5",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_6",
@@ -334,7 +334,7 @@
          "raw_value": "7",
          "description": "GPIO A, PIN 6",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_7",
@@ -342,7 +342,7 @@
          "raw_value": "8",
          "description": "GPIO A, PIN 7",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOB_0",
@@ -350,7 +350,7 @@
          "raw_value": "9",
          "description": "GPIO B, PIN 0",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOB_1",
@@ -358,7 +358,7 @@
          "raw_value": "10",
          "description": "GPIO B, PIN 1",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOB_2",
@@ -366,7 +366,7 @@
          "raw_value": "11",
          "description": "GPIO B, PIN 2",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOB_3",
@@ -374,7 +374,7 @@
          "raw_value": "12",
          "description": "GPIO B, PIN 3",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOC_0",
@@ -382,7 +382,7 @@
          "raw_value": "13",
          "description": "GPIO C, PIN 0",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOC_5",
@@ -390,7 +390,7 @@
          "raw_value": "14",
          "description": "GPIO C, PIN 1",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOC_6",
@@ -398,7 +398,7 @@
          "raw_value": "15",
          "description": "GPIO C, PIN 2",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -416,7 +416,7 @@
          "raw_value": "0",
          "description": "Only rising edges result in a counter increment or decrement",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "FALLING",
@@ -424,7 +424,7 @@
          "raw_value": "1",
          "description": "Only falling edges  result in a counter increment or decrement",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "BOTH",
@@ -432,7 +432,7 @@
          "raw_value": "2",
          "description": "Rising and falling edges result in a counter increment or decrement",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -450,7 +450,7 @@
          "raw_value": "0",
          "description": "No Trigger is emitted",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "DMA1",
@@ -458,7 +458,7 @@
          "raw_value": "1",
          "description": "DMA Controller 1 is triggered, dependant on MODE",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "DMA2",
@@ -466,7 +466,7 @@
          "raw_value": "2",
          "description": "DMA Controller 2 is triggered, dependant on MODE",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "UART",
@@ -474,7 +474,7 @@
          "raw_value": "3",
          "description": "UART is triggered, dependant on MODE",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -492,7 +492,7 @@
          "raw_value": "0",
          "description": "Selects Reload Register number 0",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "RELOAD1",
@@ -500,7 +500,7 @@
          "raw_value": "1",
          "description": "Selects Reload Register number 1",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "RELOAD2",
@@ -508,7 +508,7 @@
          "raw_value": "2",
          "description": "Selects Reload Register number 2",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "RELOAD3",
@@ -516,7 +516,7 @@
          "raw_value": "3",
          "description": "Selects Reload Register number 3",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -534,7 +534,7 @@
          "raw_value": "0",
          "description": "Reload Register number does not change automatically",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "INCREMENT",
@@ -542,7 +542,7 @@
          "raw_value": "1",
          "description": "Reload Register number is incremented on each match",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "DECREMENT",
@@ -550,7 +550,7 @@
          "raw_value": "2",
          "description": "Reload Register number is decremented on each match",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -568,7 +568,7 @@
          "raw_value": "0",
          "description": "Timer / Counter is stopped",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "START",
@@ -576,7 +576,7 @@
          "raw_value": "1",
          "description": "Timer / Counter is started",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -608,7 +608,7 @@
          "raw_value": "0",
          "description": "Timer is not running",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Running",
@@ -616,7 +616,7 @@
          "raw_value": "1",
          "description": "Timer is running",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -634,7 +634,7 @@
          "raw_value": "0",
          "description": "The MATCH condition was not hit",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Match_Hit",
@@ -642,7 +642,7 @@
          "raw_value": "1",
          "description": "The MATCH condition was hit",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -660,7 +660,7 @@
          "raw_value": "0",
          "description": "No underflow occured since last clear",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Underflow",
@@ -668,7 +668,7 @@
          "raw_value": "1",
          "description": "A minimum of one underflow occured since last clear",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -686,7 +686,7 @@
          "raw_value": "0",
          "description": "No overflow occured since last clear",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Overflow_occured",
@@ -694,7 +694,7 @@
          "raw_value": "1",
          "description": "A minimum of one overflow occured since last clear",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -712,7 +712,7 @@
          "raw_value": "0",
          "description": "Timer is not in RESET state and can operate",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "In_Reset",
@@ -720,7 +720,7 @@
          "raw_value": "1",
          "description": "Timer is in RESET state and can not operate",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -738,7 +738,7 @@
          "raw_value": "0",
          "description": "Reload Register number 0 is active",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "RELOAD1",
@@ -746,7 +746,7 @@
          "raw_value": "1",
          "description": "Reload Register number 1 is active",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "RELOAD2",
@@ -754,7 +754,7 @@
          "raw_value": "2",
          "description": "Reload Register number 2 is active",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "RELOAD3",
@@ -762,7 +762,7 @@
          "raw_value": "3",
          "description": "Reload Register number 3 is active",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -794,7 +794,7 @@
          "raw_value": "0",
          "description": "Timer does not generate Interrupts",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Enable",
@@ -802,7 +802,7 @@
          "raw_value": "1",
          "description": "Timer triggers the TIMERn Interrupt",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -820,7 +820,7 @@
          "raw_value": "0",
          "description": "Timer generates an Interrupt when the MATCH condition is hit",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Underflow",
@@ -828,7 +828,7 @@
          "raw_value": "1",
          "description": "Timer generates an Interrupt when it underflows",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Overflow",
@@ -836,7 +836,7 @@
          "raw_value": "2",
          "description": "Timer generates an Interrupt when it overflows",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -997,7 +997,7 @@
          "raw_value": "0",
          "description": "Timer is disabled and does not operate",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Enable",
@@ -1005,7 +1005,7 @@
          "raw_value": "1",
          "description": "Timer is enabled and can operate",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -1023,7 +1023,7 @@
          "raw_value": "0",
          "description": "Write as ZERO if necessary",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Reset_Timer",
@@ -1031,7 +1031,7 @@
          "raw_value": "1",
          "description": "Reset the Timer",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -1049,7 +1049,7 @@
          "raw_value": "0",
          "description": "Timer Counts UO and wraps, if no STOP condition is set",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Count_DOWN",
@@ -1057,7 +1057,7 @@
          "raw_value": "1",
          "description": "Timer Counts DOWN and wraps, if no STOP condition is set",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Toggle",
@@ -1065,7 +1065,7 @@
          "raw_value": "2",
          "description": "Timer Counts up to MAX, then DOWN to ZERO, if no STOP condition is set",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -1083,7 +1083,7 @@
          "raw_value": "0",
          "description": "Timer runs continously",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Single_ZERO_MAX",
@@ -1091,7 +1091,7 @@
          "raw_value": "1",
          "description": "Timer counts to 0x00 or 0xFFFFFFFF (depending on CNT) and stops",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Single_MATCH",
@@ -1099,7 +1099,7 @@
          "raw_value": "2",
          "description": "Timer counts to the Value of MATCH Register and stops",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Reload_ZERO_MAX",
@@ -1107,7 +1107,7 @@
          "raw_value": "3",
          "description": "Timer counts to 0x00 or 0xFFFFFFFF (depending on CNT), loads the RELOAD Value and continues",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Reload_MATCH",
@@ -1115,7 +1115,7 @@
          "raw_value": "4",
          "description": "Timer counts to the Value of MATCH Register, loads the RELOAD Value and continues",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -1133,7 +1133,7 @@
          "raw_value": "0",
          "description": "Prescaler is not used",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Enabled",
@@ -1141,7 +1141,7 @@
          "raw_value": "1",
          "description": "Prescaler is used as divider",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -1159,7 +1159,7 @@
          "raw_value": "0",
          "description": "Capture Source is used directly",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div2",
@@ -1167,7 +1167,7 @@
          "raw_value": "1",
          "description": "Capture Source is divided by 2",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div4",
@@ -1175,7 +1175,7 @@
          "raw_value": "2",
          "description": "Capture Source is divided by 4",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div8",
@@ -1183,7 +1183,7 @@
          "raw_value": "3",
          "description": "Capture Source is divided by 8",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div16",
@@ -1191,7 +1191,7 @@
          "raw_value": "4",
          "description": "Capture Source is divided by 16",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div32",
@@ -1199,7 +1199,7 @@
          "raw_value": "5",
          "description": "Capture Source is divided by 32",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div64",
@@ -1207,7 +1207,7 @@
          "raw_value": "6",
          "description": "Capture Source is divided by 64",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div128",
@@ -1215,7 +1215,7 @@
          "raw_value": "7",
          "description": "Capture Source is divided by 128",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div256",
@@ -1223,7 +1223,7 @@
          "raw_value": "8",
          "description": "Capture Source is divided by 256",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -1241,7 +1241,7 @@
          "raw_value": "0",
          "description": "Core Clock",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_0",
@@ -1249,7 +1249,7 @@
          "raw_value": "1",
          "description": "GPIO A, PIN 0",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_1",
@@ -1257,7 +1257,7 @@
          "raw_value": "2",
          "description": "GPIO A, PIN 1",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_2",
@@ -1265,7 +1265,7 @@
          "raw_value": "3",
          "description": "GPIO A, PIN 2",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_3",
@@ -1273,7 +1273,7 @@
          "raw_value": "4",
          "description": "GPIO A, PIN 3",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_4",
@@ -1281,7 +1281,7 @@
          "raw_value": "5",
          "description": "GPIO A, PIN 4",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_5",
@@ -1289,7 +1289,7 @@
          "raw_value": "6",
          "description": "GPIO A, PIN 5",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_6",
@@ -1297,7 +1297,7 @@
          "raw_value": "7",
          "description": "GPIO A, PIN 6",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_7",
@@ -1305,7 +1305,7 @@
          "raw_value": "8",
          "description": "GPIO A, PIN 7",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOB_0",
@@ -1313,7 +1313,7 @@
          "raw_value": "9",
          "description": "GPIO B, PIN 0",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOB_1",
@@ -1321,7 +1321,7 @@
          "raw_value": "10",
          "description": "GPIO B, PIN 1",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOB_2",
@@ -1329,7 +1329,7 @@
          "raw_value": "11",
          "description": "GPIO B, PIN 2",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOB_3",
@@ -1337,7 +1337,7 @@
          "raw_value": "12",
          "description": "GPIO B, PIN 3",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOC_0",
@@ -1345,7 +1345,7 @@
          "raw_value": "13",
          "description": "GPIO C, PIN 0",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOC_5",
@@ -1353,7 +1353,7 @@
          "raw_value": "14",
          "description": "GPIO C, PIN 1",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOC_6",
@@ -1361,7 +1361,7 @@
          "raw_value": "15",
          "description": "GPIO C, PIN 2",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -1379,7 +1379,7 @@
          "raw_value": "0",
          "description": "Only rising edges result in a counter increment or decrement",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "FALLING",
@@ -1387,7 +1387,7 @@
          "raw_value": "1",
          "description": "Only falling edges  result in a counter increment or decrement",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "BOTH",
@@ -1395,7 +1395,7 @@
          "raw_value": "2",
          "description": "Rising and falling edges result in a counter increment or decrement",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -1413,7 +1413,7 @@
          "raw_value": "0",
          "description": "No Trigger is emitted",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "DMA1",
@@ -1421,7 +1421,7 @@
          "raw_value": "1",
          "description": "DMA Controller 1 is triggered, dependant on MODE",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "DMA2",
@@ -1429,7 +1429,7 @@
          "raw_value": "2",
          "description": "DMA Controller 2 is triggered, dependant on MODE",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "UART",
@@ -1437,7 +1437,7 @@
          "raw_value": "3",
          "description": "UART is triggered, dependant on MODE",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -1455,7 +1455,7 @@
          "raw_value": "0",
          "description": "Selects Reload Register number 0",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "RELOAD1",
@@ -1463,7 +1463,7 @@
          "raw_value": "1",
          "description": "Selects Reload Register number 1",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "RELOAD2",
@@ -1471,7 +1471,7 @@
          "raw_value": "2",
          "description": "Selects Reload Register number 2",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "RELOAD3",
@@ -1479,7 +1479,7 @@
          "raw_value": "3",
          "description": "Selects Reload Register number 3",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -1497,7 +1497,7 @@
          "raw_value": "0",
          "description": "Reload Register number does not change automatically",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "INCREMENT",
@@ -1505,7 +1505,7 @@
          "raw_value": "1",
          "description": "Reload Register number is incremented on each match",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "DECREMENT",
@@ -1513,7 +1513,7 @@
          "raw_value": "2",
          "description": "Reload Register number is decremented on each match",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -1531,7 +1531,7 @@
          "raw_value": "0",
          "description": "Timer / Counter is stopped",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "START",
@@ -1539,7 +1539,7 @@
          "raw_value": "1",
          "description": "Timer / Counter is started",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -1571,7 +1571,7 @@
          "raw_value": "0",
          "description": "Timer is not running",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Running",
@@ -1579,7 +1579,7 @@
          "raw_value": "1",
          "description": "Timer is running",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -1597,7 +1597,7 @@
          "raw_value": "0",
          "description": "The MATCH condition was not hit",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Match_Hit",
@@ -1605,7 +1605,7 @@
          "raw_value": "1",
          "description": "The MATCH condition was hit",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -1623,7 +1623,7 @@
          "raw_value": "0",
          "description": "No underflow occured since last clear",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Underflow",
@@ -1631,7 +1631,7 @@
          "raw_value": "1",
          "description": "A minimum of one underflow occured since last clear",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -1649,7 +1649,7 @@
          "raw_value": "0",
          "description": "No overflow occured since last clear",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Overflow_occured",
@@ -1657,7 +1657,7 @@
          "raw_value": "1",
          "description": "A minimum of one overflow occured since last clear",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -1675,7 +1675,7 @@
          "raw_value": "0",
          "description": "Timer is not in RESET state and can operate",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "In_Reset",
@@ -1683,7 +1683,7 @@
          "raw_value": "1",
          "description": "Timer is in RESET state and can not operate",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -1701,7 +1701,7 @@
          "raw_value": "0",
          "description": "Reload Register number 0 is active",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "RELOAD1",
@@ -1709,7 +1709,7 @@
          "raw_value": "1",
          "description": "Reload Register number 1 is active",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "RELOAD2",
@@ -1717,7 +1717,7 @@
          "raw_value": "2",
          "description": "Reload Register number 2 is active",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "RELOAD3",
@@ -1725,7 +1725,7 @@
          "raw_value": "3",
          "description": "Reload Register number 3 is active",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -1757,7 +1757,7 @@
          "raw_value": "0",
          "description": "Timer does not generate Interrupts",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Enable",
@@ -1765,7 +1765,7 @@
          "raw_value": "1",
          "description": "Timer triggers the TIMERn Interrupt",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -1783,7 +1783,7 @@
          "raw_value": "0",
          "description": "Timer generates an Interrupt when the MATCH condition is hit",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Underflow",
@@ -1791,7 +1791,7 @@
          "raw_value": "1",
          "description": "Timer generates an Interrupt when it underflows",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Overflow",
@@ -1799,7 +1799,7 @@
          "raw_value": "2",
          "description": "Timer generates an Interrupt when it overflows",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -1960,7 +1960,7 @@
          "raw_value": "0",
          "description": "Timer is disabled and does not operate",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Enable",
@@ -1968,7 +1968,7 @@
          "raw_value": "1",
          "description": "Timer is enabled and can operate",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -1986,7 +1986,7 @@
          "raw_value": "0",
          "description": "Write as ZERO if necessary",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Reset_Timer",
@@ -1994,7 +1994,7 @@
          "raw_value": "1",
          "description": "Reset the Timer",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -2012,7 +2012,7 @@
          "raw_value": "0",
          "description": "Timer Counts UO and wraps, if no STOP condition is set",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Count_DOWN",
@@ -2020,7 +2020,7 @@
          "raw_value": "1",
          "description": "Timer Counts DOWN and wraps, if no STOP condition is set",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Toggle",
@@ -2028,7 +2028,7 @@
          "raw_value": "2",
          "description": "Timer Counts up to MAX, then DOWN to ZERO, if no STOP condition is set",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -2046,7 +2046,7 @@
          "raw_value": "0",
          "description": "Timer runs continously",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Single_ZERO_MAX",
@@ -2054,7 +2054,7 @@
          "raw_value": "1",
          "description": "Timer counts to 0x00 or 0xFFFFFFFF (depending on CNT) and stops",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Single_MATCH",
@@ -2062,7 +2062,7 @@
          "raw_value": "2",
          "description": "Timer counts to the Value of MATCH Register and stops",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Reload_ZERO_MAX",
@@ -2070,7 +2070,7 @@
          "raw_value": "3",
          "description": "Timer counts to 0x00 or 0xFFFFFFFF (depending on CNT), loads the RELOAD Value and continues",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Reload_MATCH",
@@ -2078,7 +2078,7 @@
          "raw_value": "4",
          "description": "Timer counts to the Value of MATCH Register, loads the RELOAD Value and continues",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -2096,7 +2096,7 @@
          "raw_value": "0",
          "description": "Prescaler is not used",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Enabled",
@@ -2104,7 +2104,7 @@
          "raw_value": "1",
          "description": "Prescaler is used as divider",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -2122,7 +2122,7 @@
          "raw_value": "0",
          "description": "Capture Source is used directly",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div2",
@@ -2130,7 +2130,7 @@
          "raw_value": "1",
          "description": "Capture Source is divided by 2",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div4",
@@ -2138,7 +2138,7 @@
          "raw_value": "2",
          "description": "Capture Source is divided by 4",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div8",
@@ -2146,7 +2146,7 @@
          "raw_value": "3",
          "description": "Capture Source is divided by 8",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div16",
@@ -2154,7 +2154,7 @@
          "raw_value": "4",
          "description": "Capture Source is divided by 16",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div32",
@@ -2162,7 +2162,7 @@
          "raw_value": "5",
          "description": "Capture Source is divided by 32",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div64",
@@ -2170,7 +2170,7 @@
          "raw_value": "6",
          "description": "Capture Source is divided by 64",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div128",
@@ -2178,7 +2178,7 @@
          "raw_value": "7",
          "description": "Capture Source is divided by 128",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "CAP_SRC_div256",
@@ -2186,7 +2186,7 @@
          "raw_value": "8",
          "description": "Capture Source is divided by 256",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -2204,7 +2204,7 @@
          "raw_value": "0",
          "description": "Core Clock",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_0",
@@ -2212,7 +2212,7 @@
          "raw_value": "1",
          "description": "GPIO A, PIN 0",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_1",
@@ -2220,7 +2220,7 @@
          "raw_value": "2",
          "description": "GPIO A, PIN 1",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_2",
@@ -2228,7 +2228,7 @@
          "raw_value": "3",
          "description": "GPIO A, PIN 2",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_3",
@@ -2236,7 +2236,7 @@
          "raw_value": "4",
          "description": "GPIO A, PIN 3",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_4",
@@ -2244,7 +2244,7 @@
          "raw_value": "5",
          "description": "GPIO A, PIN 4",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_5",
@@ -2252,7 +2252,7 @@
          "raw_value": "6",
          "description": "GPIO A, PIN 5",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_6",
@@ -2260,7 +2260,7 @@
          "raw_value": "7",
          "description": "GPIO A, PIN 6",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOA_7",
@@ -2268,7 +2268,7 @@
          "raw_value": "8",
          "description": "GPIO A, PIN 7",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOB_0",
@@ -2276,7 +2276,7 @@
          "raw_value": "9",
          "description": "GPIO B, PIN 0",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOB_1",
@@ -2284,7 +2284,7 @@
          "raw_value": "10",
          "description": "GPIO B, PIN 1",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOB_2",
@@ -2292,7 +2292,7 @@
          "raw_value": "11",
          "description": "GPIO B, PIN 2",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOB_3",
@@ -2300,7 +2300,7 @@
          "raw_value": "12",
          "description": "GPIO B, PIN 3",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOC_0",
@@ -2308,7 +2308,7 @@
          "raw_value": "13",
          "description": "GPIO C, PIN 0",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOC_5",
@@ -2316,7 +2316,7 @@
          "raw_value": "14",
          "description": "GPIO C, PIN 1",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "GPIOC_6",
@@ -2324,7 +2324,7 @@
          "raw_value": "15",
          "description": "GPIO C, PIN 2",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -2342,7 +2342,7 @@
          "raw_value": "0",
          "description": "Only rising edges result in a counter increment or decrement",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "FALLING",
@@ -2350,7 +2350,7 @@
          "raw_value": "1",
          "description": "Only falling edges  result in a counter increment or decrement",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "BOTH",
@@ -2358,7 +2358,7 @@
          "raw_value": "2",
          "description": "Rising and falling edges result in a counter increment or decrement",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -2376,7 +2376,7 @@
          "raw_value": "0",
          "description": "No Trigger is emitted",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "DMA1",
@@ -2384,7 +2384,7 @@
          "raw_value": "1",
          "description": "DMA Controller 1 is triggered, dependant on MODE",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "DMA2",
@@ -2392,7 +2392,7 @@
          "raw_value": "2",
          "description": "DMA Controller 2 is triggered, dependant on MODE",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "UART",
@@ -2400,7 +2400,7 @@
          "raw_value": "3",
          "description": "UART is triggered, dependant on MODE",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -2418,7 +2418,7 @@
          "raw_value": "0",
          "description": "Selects Reload Register number 0",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "RELOAD1",
@@ -2426,7 +2426,7 @@
          "raw_value": "1",
          "description": "Selects Reload Register number 1",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "RELOAD2",
@@ -2434,7 +2434,7 @@
          "raw_value": "2",
          "description": "Selects Reload Register number 2",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "RELOAD3",
@@ -2442,7 +2442,7 @@
          "raw_value": "3",
          "description": "Selects Reload Register number 3",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -2460,7 +2460,7 @@
          "raw_value": "0",
          "description": "Reload Register number does not change automatically",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "INCREMENT",
@@ -2468,7 +2468,7 @@
          "raw_value": "1",
          "description": "Reload Register number is incremented on each match",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "DECREMENT",
@@ -2476,7 +2476,7 @@
          "raw_value": "2",
          "description": "Reload Register number is decremented on each match",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -2494,7 +2494,7 @@
          "raw_value": "0",
          "description": "Timer / Counter is stopped",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "START",
@@ -2502,7 +2502,7 @@
          "raw_value": "1",
          "description": "Timer / Counter is started",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -2534,7 +2534,7 @@
          "raw_value": "0",
          "description": "Timer is not running",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Running",
@@ -2542,7 +2542,7 @@
          "raw_value": "1",
          "description": "Timer is running",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -2560,7 +2560,7 @@
          "raw_value": "0",
          "description": "The MATCH condition was not hit",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Match_Hit",
@@ -2568,7 +2568,7 @@
          "raw_value": "1",
          "description": "The MATCH condition was hit",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -2586,7 +2586,7 @@
          "raw_value": "0",
          "description": "No underflow occured since last clear",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Underflow",
@@ -2594,7 +2594,7 @@
          "raw_value": "1",
          "description": "A minimum of one underflow occured since last clear",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -2612,7 +2612,7 @@
          "raw_value": "0",
          "description": "No overflow occured since last clear",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Overflow_occured",
@@ -2620,7 +2620,7 @@
          "raw_value": "1",
          "description": "A minimum of one overflow occured since last clear",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -2638,7 +2638,7 @@
          "raw_value": "0",
          "description": "Timer is not in RESET state and can operate",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "In_Reset",
@@ -2646,7 +2646,7 @@
          "raw_value": "1",
          "description": "Timer is in RESET state and can not operate",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -2664,7 +2664,7 @@
          "raw_value": "0",
          "description": "Reload Register number 0 is active",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "RELOAD1",
@@ -2672,7 +2672,7 @@
          "raw_value": "1",
          "description": "Reload Register number 1 is active",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "RELOAD2",
@@ -2680,7 +2680,7 @@
          "raw_value": "2",
          "description": "Reload Register number 2 is active",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "RELOAD3",
@@ -2688,7 +2688,7 @@
          "raw_value": "3",
          "description": "Reload Register number 3 is active",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -2720,7 +2720,7 @@
          "raw_value": "0",
          "description": "Timer does not generate Interrupts",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Enable",
@@ -2728,7 +2728,7 @@
          "raw_value": "1",
          "description": "Timer triggers the TIMERn Interrupt",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null
@@ -2746,7 +2746,7 @@
          "raw_value": "0",
          "description": "Timer generates an Interrupt when the MATCH condition is hit",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Underflow",
@@ -2754,7 +2754,7 @@
          "raw_value": "1",
          "description": "Timer generates an Interrupt when it underflows",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         },
         {
          "name": "Overflow",
@@ -2762,7 +2762,7 @@
          "raw_value": "2",
          "description": "Timer generates an Interrupt when it overflows",
          "is_default": false,
-         "usage": null
+         "usage": "read-write"
         }
        ],
        "dim": null

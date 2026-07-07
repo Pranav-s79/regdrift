@@ -81,6 +81,9 @@ _WRAPPERS: dict[str, frozenset[str]] = {
     "register": frozenset({"fields"}),
 }
 
+# Field bit-range styles are mutually exclusive during derivedFrom merging.
+_BIT_RANGE_KEYS = frozenset({"bitOffset", "bitWidth", "lsb", "msb", "bitRange"})
+
 
 def _local(tag: str) -> str:
     """Strip any XML namespace prefix."""
@@ -152,8 +155,16 @@ class _Resolver:
                     node.children = [
                         self._clone(c, node, base.path, node.path) for c in base.children
                     ]
+                # The bit-range props form one exclusive group: a derived
+                # field that defines its own range (in any of the three
+                # styles) must not inherit pieces of the base's style, or
+                # e.g. a base bitOffset would shadow a derived bitRange.
+                skip: frozenset[str] = frozenset()
+                if node.tag == "field" and _BIT_RANGE_KEYS & node.props.keys():
+                    skip = _BIT_RANGE_KEYS
                 for key, value in base.props.items():
-                    node.props.setdefault(key, value)
+                    if key not in skip:
+                        node.props.setdefault(key, value)
                 node.derived_from = None
             for child in node.children:
                 self._ensure_resolved(child)
@@ -203,6 +214,11 @@ class _Resolver:
     def _lookup_scoped(self, ref: str, node: _Node) -> _Node | None:
         scope = node.parent
         while scope is not None:
+            # unqualified refs never cross peripheral boundaries (the spec
+            # reserves that for dotted names) — only peripherals themselves
+            # resolve at device scope
+            if scope.tag == "device" and node.tag != "peripheral":
+                return None
             found = self._find_named(scope, node.tag, ref, node)
             if found is not None:
                 return found
@@ -210,9 +226,11 @@ class _Resolver:
         return None
 
     def _find_named(self, scope: _Node, tag: str, ref: str, skip: _Node) -> _Node | None:
+        # same-scope siblings win over matches buried in nested clusters
         for child in scope.children:
             if child is not skip and child.tag == tag and child.props.get("name") == ref:
                 return child
+        for child in scope.children:
             found = self._find_named(child, tag, ref, skip)
             if found is not None:
                 return found
@@ -319,7 +337,9 @@ def _expand(node: _Node) -> list[tuple[str, int, DimInfo | None]]:
 def _build_enums(field_node: _Node) -> list[EnumeratedValue]:
     enums: list[EnumeratedValue] = []
     for container in field_node.children:
-        usage = container.props.get("usage") or None
+        # spec default: an omitted <usage> means read-write; normalize so an
+        # explicit-vs-omitted difference never diffs as a change
+        usage = container.props.get("usage") or "read-write"
         for entry in container.children:
             props = entry.props
             raw_value = props.get("value") or None
