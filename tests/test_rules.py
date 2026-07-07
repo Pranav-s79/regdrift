@@ -104,18 +104,32 @@ def test_rule_mapping(change: Change, rule_id: str, severity: str) -> None:
 
 def test_allow_by_rule_and_path() -> None:
     change = Change("moved", "register", "UART0.CTRL", "address_offset", 0, 4)
-    rule_id, severity = _one(change, allow=["RD001:UART0.CTRL"])
-    assert (rule_id, severity) == ("RD001", "ALLOWED")
+    findings = classify_changes([change], allow=["RD001:UART0.CTRL"])
+    assert (findings[0].rule_id, findings[0].severity, findings[0].allowed) == (
+        "RD001",
+        "BREAKING",
+        True,
+    )
 
 
 def test_allow_whole_rule() -> None:
     change = Change("moved", "register", "UART0.CTRL", "address_offset", 0, 4)
-    assert _one(change, allow=["RD001"]) == ("RD001", "ALLOWED")
+    findings = classify_changes([change], allow=["RD001"])
+    assert (findings[0].rule_id, findings[0].severity, findings[0].allowed) == (
+        "RD001",
+        "BREAKING",
+        True,
+    )
 
 
 def test_allow_wrong_path_does_not_match() -> None:
     change = Change("moved", "register", "UART0.CTRL", "address_offset", 0, 4)
-    assert _one(change, allow=["RD001:SPI0.CTRL"]) == ("RD001", "BREAKING")
+    findings = classify_changes([change], allow=["RD001:SPI0.CTRL"])
+    assert (findings[0].rule_id, findings[0].severity, findings[0].allowed) == (
+        "RD001",
+        "BREAKING",
+        False,
+    )
 
 
 def test_allow_wrong_rule_does_not_match() -> None:

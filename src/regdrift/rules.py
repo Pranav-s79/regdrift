@@ -52,7 +52,6 @@ def classify_changes(
             finding.severity = severity_overrides[finding.rule_id]
         if any(_allows(rule, path, finding) for rule, path in allow_entries):
             finding.allowed = True
-            finding.severity = ALLOWED
         findings.append(finding)
     return findings
 
