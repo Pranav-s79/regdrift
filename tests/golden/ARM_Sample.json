@@ -1,0 +1,2898 @@
+{
+ "name": "ARMCM3xxx",
+ "version": "1.0",
+ "description": "ARM 32-bit Cortex-M3 Microcontroller based device, CPU clock up to 80MHz, etc.",
+ "address_unit_bits": 8,
+ "width": 32,
+ "peripherals": [
+  {
+   "name": "TIMER0",
+   "base_address": 1073807360,
+   "description": "32 Timer / Counter, counting up or down from different sources",
+   "group_name": "TIMER",
+   "children": [
+    {
+     "name": "CR",
+     "address_offset": 0,
+     "size": 32,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 20152191,
+     "protection": null,
+     "description": "Control Register",
+     "fields": [
+      {
+       "name": "EN",
+       "bit_offset": 0,
+       "bit_width": 1,
+       "access": "read-write",
+       "description": "Enable",
+       "enumerated_values": [
+        {
+         "name": "Disable",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer is disabled and does not operate",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Enable",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer is enabled and can operate",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "RST",
+       "bit_offset": 1,
+       "bit_width": 1,
+       "access": "write-only",
+       "description": "Reset Timer",
+       "enumerated_values": [
+        {
+         "name": "Reserved",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Write as ZERO if necessary",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Reset_Timer",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Reset the Timer",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "CNT",
+       "bit_offset": 2,
+       "bit_width": 2,
+       "access": "read-write",
+       "description": "Counting direction",
+       "enumerated_values": [
+        {
+         "name": "Count_UP",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer Counts UO and wraps, if no STOP condition is set",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Count_DOWN",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer Counts DOWN and wraps, if no STOP condition is set",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Toggle",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Timer Counts up to MAX, then DOWN to ZERO, if no STOP condition is set",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "MODE",
+       "bit_offset": 4,
+       "bit_width": 3,
+       "access": "read-write",
+       "description": "Operation Mode",
+       "enumerated_values": [
+        {
+         "name": "Continous",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer runs continously",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Single_ZERO_MAX",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer counts to 0x00 or 0xFFFFFFFF (depending on CNT) and stops",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Single_MATCH",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Timer counts to the Value of MATCH Register and stops",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Reload_ZERO_MAX",
+         "value": 3,
+         "raw_value": "3",
+         "description": "Timer counts to 0x00 or 0xFFFFFFFF (depending on CNT), loads the RELOAD Value and continues",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Reload_MATCH",
+         "value": 4,
+         "raw_value": "4",
+         "description": "Timer counts to the Value of MATCH Register, loads the RELOAD Value and continues",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "PSC",
+       "bit_offset": 7,
+       "bit_width": 1,
+       "access": "read-write",
+       "description": "Use Prescaler",
+       "enumerated_values": [
+        {
+         "name": "Disabled",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Prescaler is not used",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Enabled",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Prescaler is used as divider",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "CNTSRC",
+       "bit_offset": 8,
+       "bit_width": 4,
+       "access": "read-write",
+       "description": "Timer / Counter Source Divider",
+       "enumerated_values": [
+        {
+         "name": "CAP_SRC",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Capture Source is used directly",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div2",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Capture Source is divided by 2",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div4",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Capture Source is divided by 4",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div8",
+         "value": 3,
+         "raw_value": "3",
+         "description": "Capture Source is divided by 8",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div16",
+         "value": 4,
+         "raw_value": "4",
+         "description": "Capture Source is divided by 16",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div32",
+         "value": 5,
+         "raw_value": "5",
+         "description": "Capture Source is divided by 32",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div64",
+         "value": 6,
+         "raw_value": "6",
+         "description": "Capture Source is divided by 64",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div128",
+         "value": 7,
+         "raw_value": "7",
+         "description": "Capture Source is divided by 128",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div256",
+         "value": 8,
+         "raw_value": "8",
+         "description": "Capture Source is divided by 256",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "CAPSRC",
+       "bit_offset": 12,
+       "bit_width": 4,
+       "access": "read-write",
+       "description": "Timer / Counter Capture Source",
+       "enumerated_values": [
+        {
+         "name": "CClk",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Core Clock",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_0",
+         "value": 1,
+         "raw_value": "1",
+         "description": "GPIO A, PIN 0",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_1",
+         "value": 2,
+         "raw_value": "2",
+         "description": "GPIO A, PIN 1",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_2",
+         "value": 3,
+         "raw_value": "3",
+         "description": "GPIO A, PIN 2",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_3",
+         "value": 4,
+         "raw_value": "4",
+         "description": "GPIO A, PIN 3",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_4",
+         "value": 5,
+         "raw_value": "5",
+         "description": "GPIO A, PIN 4",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_5",
+         "value": 6,
+         "raw_value": "6",
+         "description": "GPIO A, PIN 5",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_6",
+         "value": 7,
+         "raw_value": "7",
+         "description": "GPIO A, PIN 6",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_7",
+         "value": 8,
+         "raw_value": "8",
+         "description": "GPIO A, PIN 7",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOB_0",
+         "value": 9,
+         "raw_value": "9",
+         "description": "GPIO B, PIN 0",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOB_1",
+         "value": 10,
+         "raw_value": "10",
+         "description": "GPIO B, PIN 1",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOB_2",
+         "value": 11,
+         "raw_value": "11",
+         "description": "GPIO B, PIN 2",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOB_3",
+         "value": 12,
+         "raw_value": "12",
+         "description": "GPIO B, PIN 3",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOC_0",
+         "value": 13,
+         "raw_value": "13",
+         "description": "GPIO C, PIN 0",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOC_5",
+         "value": 14,
+         "raw_value": "14",
+         "description": "GPIO C, PIN 1",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOC_6",
+         "value": 15,
+         "raw_value": "15",
+         "description": "GPIO C, PIN 2",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "CAPEDGE",
+       "bit_offset": 16,
+       "bit_width": 2,
+       "access": "read-write",
+       "description": "Capture Edge, select which Edge should result in a counter increment or decrement",
+       "enumerated_values": [
+        {
+         "name": "RISING",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Only rising edges result in a counter increment or decrement",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "FALLING",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Only falling edges  result in a counter increment or decrement",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "BOTH",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Rising and falling edges result in a counter increment or decrement",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "TRGEXT",
+       "bit_offset": 20,
+       "bit_width": 2,
+       "access": "read-write",
+       "description": "Triggers an other Peripheral",
+       "enumerated_values": [
+        {
+         "name": "NONE",
+         "value": 0,
+         "raw_value": "0",
+         "description": "No Trigger is emitted",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "DMA1",
+         "value": 1,
+         "raw_value": "1",
+         "description": "DMA Controller 1 is triggered, dependant on MODE",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "DMA2",
+         "value": 2,
+         "raw_value": "2",
+         "description": "DMA Controller 2 is triggered, dependant on MODE",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "UART",
+         "value": 3,
+         "raw_value": "3",
+         "description": "UART is triggered, dependant on MODE",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "RELOAD",
+       "bit_offset": 24,
+       "bit_width": 2,
+       "access": "read-write",
+       "description": "Select RELOAD Register n to reload Timer on condition",
+       "enumerated_values": [
+        {
+         "name": "RELOAD0",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Selects Reload Register number 0",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "RELOAD1",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Selects Reload Register number 1",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "RELOAD2",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Selects Reload Register number 2",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "RELOAD3",
+         "value": 3,
+         "raw_value": "3",
+         "description": "Selects Reload Register number 3",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "IDR",
+       "bit_offset": 26,
+       "bit_width": 2,
+       "access": "read-write",
+       "description": "Selects, if Reload Register number is incremented, decremented or not modified",
+       "enumerated_values": [
+        {
+         "name": "KEEP",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Reload Register number does not change automatically",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "INCREMENT",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Reload Register number is incremented on each match",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "DECREMENT",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Reload Register number is decremented on each match",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "S",
+       "bit_offset": 31,
+       "bit_width": 1,
+       "access": "read-write",
+       "description": "Starts and Stops the Timer / Counter",
+       "enumerated_values": [
+        {
+         "name": "STOP",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer / Counter is stopped",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "START",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer / Counter is started",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      }
+     ],
+     "dim": null,
+     "kind": "register"
+    },
+    {
+     "name": "SR",
+     "address_offset": 4,
+     "size": 16,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 55041,
+     "protection": null,
+     "description": "Status Register",
+     "fields": [
+      {
+       "name": "RUN",
+       "bit_offset": 0,
+       "bit_width": 1,
+       "access": "read-only",
+       "description": "Shows if Timer is running or not",
+       "enumerated_values": [
+        {
+         "name": "Stopped",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer is not running",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Running",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer is running",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "MATCH",
+       "bit_offset": 8,
+       "bit_width": 1,
+       "access": "read-write",
+       "description": "Shows if the MATCH was hit",
+       "enumerated_values": [
+        {
+         "name": "No_Match",
+         "value": 0,
+         "raw_value": "0",
+         "description": "The MATCH condition was not hit",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Match_Hit",
+         "value": 1,
+         "raw_value": "1",
+         "description": "The MATCH condition was hit",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "UN",
+       "bit_offset": 9,
+       "bit_width": 1,
+       "access": "read-write",
+       "description": "Shows if an underflow occured. This flag is sticky",
+       "enumerated_values": [
+        {
+         "name": "No_Underflow",
+         "value": 0,
+         "raw_value": "0",
+         "description": "No underflow occured since last clear",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Underflow",
+         "value": 1,
+         "raw_value": "1",
+         "description": "A minimum of one underflow occured since last clear",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "OV",
+       "bit_offset": 10,
+       "bit_width": 1,
+       "access": "read-write",
+       "description": "Shows if an overflow occured. This flag is sticky",
+       "enumerated_values": [
+        {
+         "name": "No_Overflow",
+         "value": 0,
+         "raw_value": "0",
+         "description": "No overflow occured since last clear",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Overflow_occured",
+         "value": 1,
+         "raw_value": "1",
+         "description": "A minimum of one overflow occured since last clear",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "RST",
+       "bit_offset": 12,
+       "bit_width": 1,
+       "access": "read-only",
+       "description": "Shows if Timer is in RESET state",
+       "enumerated_values": [
+        {
+         "name": "Ready",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer is not in RESET state and can operate",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "In_Reset",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer is in RESET state and can not operate",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "RELOAD",
+       "bit_offset": 14,
+       "bit_width": 2,
+       "access": "read-only",
+       "description": "Shows the currently active RELOAD Register",
+       "enumerated_values": [
+        {
+         "name": "RELOAD0",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Reload Register number 0 is active",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "RELOAD1",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Reload Register number 1 is active",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "RELOAD2",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Reload Register number 2 is active",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "RELOAD3",
+         "value": 3,
+         "raw_value": "3",
+         "description": "Reload Register number 3 is active",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      }
+     ],
+     "dim": null,
+     "kind": "register"
+    },
+    {
+     "name": "INT",
+     "address_offset": 16,
+     "size": 16,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 1905,
+     "protection": null,
+     "description": "Interrupt Register",
+     "fields": [
+      {
+       "name": "EN",
+       "bit_offset": 0,
+       "bit_width": 1,
+       "access": "read-write",
+       "description": "Interrupt Enable",
+       "enumerated_values": [
+        {
+         "name": "Disabled",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer does not generate Interrupts",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Enable",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer triggers the TIMERn Interrupt",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "MODE",
+       "bit_offset": 4,
+       "bit_width": 3,
+       "access": "read-write",
+       "description": "Interrupt Mode, selects on which condition the Timer should generate an Interrupt",
+       "enumerated_values": [
+        {
+         "name": "Match",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer generates an Interrupt when the MATCH condition is hit",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Underflow",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer generates an Interrupt when it underflows",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Overflow",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Timer generates an Interrupt when it overflows",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      }
+     ],
+     "dim": null,
+     "kind": "register"
+    },
+    {
+     "name": "COUNT",
+     "address_offset": 32,
+     "size": 32,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Counter Register reflects the actual Value of the Timer/Counter",
+     "fields": [],
+     "dim": null,
+     "kind": "register"
+    },
+    {
+     "name": "MATCH",
+     "address_offset": 36,
+     "size": 32,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Match Register stores the compare Value for the MATCH condition",
+     "fields": [],
+     "dim": null,
+     "kind": "register"
+    },
+    {
+     "name": "PRESCALE_RD",
+     "address_offset": 40,
+     "size": 32,
+     "access": "read-only",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Prescale Register stores the Value for the prescaler. The cont event gets divided by this value",
+     "fields": [],
+     "dim": null,
+     "kind": "register"
+    },
+    {
+     "name": "PRESCALE_WR",
+     "address_offset": 40,
+     "size": 32,
+     "access": "write-only",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Prescale Register stores the Value for the prescaler. The cont event gets divided by this value",
+     "fields": [],
+     "dim": null,
+     "kind": "register"
+    },
+    {
+     "name": "RELOAD0",
+     "address_offset": 80,
+     "size": 32,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Reload Register stores the Value the COUNT Register gets reloaded on a when a condition was met.",
+     "fields": [],
+     "dim": {
+      "count": 4,
+      "increment": 4,
+      "index": "0"
+     },
+     "kind": "register"
+    },
+    {
+     "name": "RELOAD1",
+     "address_offset": 84,
+     "size": 32,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Reload Register stores the Value the COUNT Register gets reloaded on a when a condition was met.",
+     "fields": [],
+     "dim": {
+      "count": 4,
+      "increment": 4,
+      "index": "1"
+     },
+     "kind": "register"
+    },
+    {
+     "name": "RELOAD2",
+     "address_offset": 88,
+     "size": 32,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Reload Register stores the Value the COUNT Register gets reloaded on a when a condition was met.",
+     "fields": [],
+     "dim": {
+      "count": 4,
+      "increment": 4,
+      "index": "2"
+     },
+     "kind": "register"
+    },
+    {
+     "name": "RELOAD3",
+     "address_offset": 92,
+     "size": 32,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Reload Register stores the Value the COUNT Register gets reloaded on a when a condition was met.",
+     "fields": [],
+     "dim": {
+      "count": 4,
+      "increment": 4,
+      "index": "3"
+     },
+     "kind": "register"
+    }
+   ],
+   "dim": null
+  },
+  {
+   "name": "TIMER1",
+   "base_address": 1073807616,
+   "description": "32 Timer / Counter, counting up or down from different sources",
+   "group_name": "TIMER",
+   "children": [
+    {
+     "name": "CR",
+     "address_offset": 0,
+     "size": 32,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 20152191,
+     "protection": null,
+     "description": "Control Register",
+     "fields": [
+      {
+       "name": "EN",
+       "bit_offset": 0,
+       "bit_width": 1,
+       "access": "read-write",
+       "description": "Enable",
+       "enumerated_values": [
+        {
+         "name": "Disable",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer is disabled and does not operate",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Enable",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer is enabled and can operate",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "RST",
+       "bit_offset": 1,
+       "bit_width": 1,
+       "access": "write-only",
+       "description": "Reset Timer",
+       "enumerated_values": [
+        {
+         "name": "Reserved",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Write as ZERO if necessary",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Reset_Timer",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Reset the Timer",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "CNT",
+       "bit_offset": 2,
+       "bit_width": 2,
+       "access": "read-write",
+       "description": "Counting direction",
+       "enumerated_values": [
+        {
+         "name": "Count_UP",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer Counts UO and wraps, if no STOP condition is set",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Count_DOWN",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer Counts DOWN and wraps, if no STOP condition is set",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Toggle",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Timer Counts up to MAX, then DOWN to ZERO, if no STOP condition is set",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "MODE",
+       "bit_offset": 4,
+       "bit_width": 3,
+       "access": "read-write",
+       "description": "Operation Mode",
+       "enumerated_values": [
+        {
+         "name": "Continous",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer runs continously",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Single_ZERO_MAX",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer counts to 0x00 or 0xFFFFFFFF (depending on CNT) and stops",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Single_MATCH",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Timer counts to the Value of MATCH Register and stops",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Reload_ZERO_MAX",
+         "value": 3,
+         "raw_value": "3",
+         "description": "Timer counts to 0x00 or 0xFFFFFFFF (depending on CNT), loads the RELOAD Value and continues",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Reload_MATCH",
+         "value": 4,
+         "raw_value": "4",
+         "description": "Timer counts to the Value of MATCH Register, loads the RELOAD Value and continues",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "PSC",
+       "bit_offset": 7,
+       "bit_width": 1,
+       "access": "read-write",
+       "description": "Use Prescaler",
+       "enumerated_values": [
+        {
+         "name": "Disabled",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Prescaler is not used",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Enabled",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Prescaler is used as divider",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "CNTSRC",
+       "bit_offset": 8,
+       "bit_width": 4,
+       "access": "read-write",
+       "description": "Timer / Counter Source Divider",
+       "enumerated_values": [
+        {
+         "name": "CAP_SRC",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Capture Source is used directly",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div2",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Capture Source is divided by 2",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div4",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Capture Source is divided by 4",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div8",
+         "value": 3,
+         "raw_value": "3",
+         "description": "Capture Source is divided by 8",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div16",
+         "value": 4,
+         "raw_value": "4",
+         "description": "Capture Source is divided by 16",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div32",
+         "value": 5,
+         "raw_value": "5",
+         "description": "Capture Source is divided by 32",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div64",
+         "value": 6,
+         "raw_value": "6",
+         "description": "Capture Source is divided by 64",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div128",
+         "value": 7,
+         "raw_value": "7",
+         "description": "Capture Source is divided by 128",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div256",
+         "value": 8,
+         "raw_value": "8",
+         "description": "Capture Source is divided by 256",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "CAPSRC",
+       "bit_offset": 12,
+       "bit_width": 4,
+       "access": "read-write",
+       "description": "Timer / Counter Capture Source",
+       "enumerated_values": [
+        {
+         "name": "CClk",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Core Clock",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_0",
+         "value": 1,
+         "raw_value": "1",
+         "description": "GPIO A, PIN 0",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_1",
+         "value": 2,
+         "raw_value": "2",
+         "description": "GPIO A, PIN 1",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_2",
+         "value": 3,
+         "raw_value": "3",
+         "description": "GPIO A, PIN 2",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_3",
+         "value": 4,
+         "raw_value": "4",
+         "description": "GPIO A, PIN 3",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_4",
+         "value": 5,
+         "raw_value": "5",
+         "description": "GPIO A, PIN 4",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_5",
+         "value": 6,
+         "raw_value": "6",
+         "description": "GPIO A, PIN 5",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_6",
+         "value": 7,
+         "raw_value": "7",
+         "description": "GPIO A, PIN 6",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_7",
+         "value": 8,
+         "raw_value": "8",
+         "description": "GPIO A, PIN 7",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOB_0",
+         "value": 9,
+         "raw_value": "9",
+         "description": "GPIO B, PIN 0",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOB_1",
+         "value": 10,
+         "raw_value": "10",
+         "description": "GPIO B, PIN 1",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOB_2",
+         "value": 11,
+         "raw_value": "11",
+         "description": "GPIO B, PIN 2",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOB_3",
+         "value": 12,
+         "raw_value": "12",
+         "description": "GPIO B, PIN 3",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOC_0",
+         "value": 13,
+         "raw_value": "13",
+         "description": "GPIO C, PIN 0",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOC_5",
+         "value": 14,
+         "raw_value": "14",
+         "description": "GPIO C, PIN 1",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOC_6",
+         "value": 15,
+         "raw_value": "15",
+         "description": "GPIO C, PIN 2",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "CAPEDGE",
+       "bit_offset": 16,
+       "bit_width": 2,
+       "access": "read-write",
+       "description": "Capture Edge, select which Edge should result in a counter increment or decrement",
+       "enumerated_values": [
+        {
+         "name": "RISING",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Only rising edges result in a counter increment or decrement",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "FALLING",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Only falling edges  result in a counter increment or decrement",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "BOTH",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Rising and falling edges result in a counter increment or decrement",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "TRGEXT",
+       "bit_offset": 20,
+       "bit_width": 2,
+       "access": "read-write",
+       "description": "Triggers an other Peripheral",
+       "enumerated_values": [
+        {
+         "name": "NONE",
+         "value": 0,
+         "raw_value": "0",
+         "description": "No Trigger is emitted",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "DMA1",
+         "value": 1,
+         "raw_value": "1",
+         "description": "DMA Controller 1 is triggered, dependant on MODE",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "DMA2",
+         "value": 2,
+         "raw_value": "2",
+         "description": "DMA Controller 2 is triggered, dependant on MODE",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "UART",
+         "value": 3,
+         "raw_value": "3",
+         "description": "UART is triggered, dependant on MODE",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "RELOAD",
+       "bit_offset": 24,
+       "bit_width": 2,
+       "access": "read-write",
+       "description": "Select RELOAD Register n to reload Timer on condition",
+       "enumerated_values": [
+        {
+         "name": "RELOAD0",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Selects Reload Register number 0",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "RELOAD1",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Selects Reload Register number 1",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "RELOAD2",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Selects Reload Register number 2",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "RELOAD3",
+         "value": 3,
+         "raw_value": "3",
+         "description": "Selects Reload Register number 3",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "IDR",
+       "bit_offset": 26,
+       "bit_width": 2,
+       "access": "read-write",
+       "description": "Selects, if Reload Register number is incremented, decremented or not modified",
+       "enumerated_values": [
+        {
+         "name": "KEEP",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Reload Register number does not change automatically",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "INCREMENT",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Reload Register number is incremented on each match",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "DECREMENT",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Reload Register number is decremented on each match",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "S",
+       "bit_offset": 31,
+       "bit_width": 1,
+       "access": "read-write",
+       "description": "Starts and Stops the Timer / Counter",
+       "enumerated_values": [
+        {
+         "name": "STOP",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer / Counter is stopped",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "START",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer / Counter is started",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      }
+     ],
+     "dim": null,
+     "kind": "register"
+    },
+    {
+     "name": "SR",
+     "address_offset": 4,
+     "size": 16,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 55041,
+     "protection": null,
+     "description": "Status Register",
+     "fields": [
+      {
+       "name": "RUN",
+       "bit_offset": 0,
+       "bit_width": 1,
+       "access": "read-only",
+       "description": "Shows if Timer is running or not",
+       "enumerated_values": [
+        {
+         "name": "Stopped",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer is not running",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Running",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer is running",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "MATCH",
+       "bit_offset": 8,
+       "bit_width": 1,
+       "access": "read-write",
+       "description": "Shows if the MATCH was hit",
+       "enumerated_values": [
+        {
+         "name": "No_Match",
+         "value": 0,
+         "raw_value": "0",
+         "description": "The MATCH condition was not hit",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Match_Hit",
+         "value": 1,
+         "raw_value": "1",
+         "description": "The MATCH condition was hit",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "UN",
+       "bit_offset": 9,
+       "bit_width": 1,
+       "access": "read-write",
+       "description": "Shows if an underflow occured. This flag is sticky",
+       "enumerated_values": [
+        {
+         "name": "No_Underflow",
+         "value": 0,
+         "raw_value": "0",
+         "description": "No underflow occured since last clear",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Underflow",
+         "value": 1,
+         "raw_value": "1",
+         "description": "A minimum of one underflow occured since last clear",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "OV",
+       "bit_offset": 10,
+       "bit_width": 1,
+       "access": "read-write",
+       "description": "Shows if an overflow occured. This flag is sticky",
+       "enumerated_values": [
+        {
+         "name": "No_Overflow",
+         "value": 0,
+         "raw_value": "0",
+         "description": "No overflow occured since last clear",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Overflow_occured",
+         "value": 1,
+         "raw_value": "1",
+         "description": "A minimum of one overflow occured since last clear",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "RST",
+       "bit_offset": 12,
+       "bit_width": 1,
+       "access": "read-only",
+       "description": "Shows if Timer is in RESET state",
+       "enumerated_values": [
+        {
+         "name": "Ready",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer is not in RESET state and can operate",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "In_Reset",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer is in RESET state and can not operate",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "RELOAD",
+       "bit_offset": 14,
+       "bit_width": 2,
+       "access": "read-only",
+       "description": "Shows the currently active RELOAD Register",
+       "enumerated_values": [
+        {
+         "name": "RELOAD0",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Reload Register number 0 is active",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "RELOAD1",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Reload Register number 1 is active",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "RELOAD2",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Reload Register number 2 is active",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "RELOAD3",
+         "value": 3,
+         "raw_value": "3",
+         "description": "Reload Register number 3 is active",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      }
+     ],
+     "dim": null,
+     "kind": "register"
+    },
+    {
+     "name": "INT",
+     "address_offset": 16,
+     "size": 16,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 1905,
+     "protection": null,
+     "description": "Interrupt Register",
+     "fields": [
+      {
+       "name": "EN",
+       "bit_offset": 0,
+       "bit_width": 1,
+       "access": "read-write",
+       "description": "Interrupt Enable",
+       "enumerated_values": [
+        {
+         "name": "Disabled",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer does not generate Interrupts",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Enable",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer triggers the TIMERn Interrupt",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "MODE",
+       "bit_offset": 4,
+       "bit_width": 3,
+       "access": "read-write",
+       "description": "Interrupt Mode, selects on which condition the Timer should generate an Interrupt",
+       "enumerated_values": [
+        {
+         "name": "Match",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer generates an Interrupt when the MATCH condition is hit",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Underflow",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer generates an Interrupt when it underflows",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Overflow",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Timer generates an Interrupt when it overflows",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      }
+     ],
+     "dim": null,
+     "kind": "register"
+    },
+    {
+     "name": "COUNT",
+     "address_offset": 32,
+     "size": 32,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Counter Register reflects the actual Value of the Timer/Counter",
+     "fields": [],
+     "dim": null,
+     "kind": "register"
+    },
+    {
+     "name": "MATCH",
+     "address_offset": 36,
+     "size": 32,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Match Register stores the compare Value for the MATCH condition",
+     "fields": [],
+     "dim": null,
+     "kind": "register"
+    },
+    {
+     "name": "PRESCALE_RD",
+     "address_offset": 40,
+     "size": 32,
+     "access": "read-only",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Prescale Register stores the Value for the prescaler. The cont event gets divided by this value",
+     "fields": [],
+     "dim": null,
+     "kind": "register"
+    },
+    {
+     "name": "PRESCALE_WR",
+     "address_offset": 40,
+     "size": 32,
+     "access": "write-only",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Prescale Register stores the Value for the prescaler. The cont event gets divided by this value",
+     "fields": [],
+     "dim": null,
+     "kind": "register"
+    },
+    {
+     "name": "RELOAD0",
+     "address_offset": 80,
+     "size": 32,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Reload Register stores the Value the COUNT Register gets reloaded on a when a condition was met.",
+     "fields": [],
+     "dim": {
+      "count": 4,
+      "increment": 4,
+      "index": "0"
+     },
+     "kind": "register"
+    },
+    {
+     "name": "RELOAD1",
+     "address_offset": 84,
+     "size": 32,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Reload Register stores the Value the COUNT Register gets reloaded on a when a condition was met.",
+     "fields": [],
+     "dim": {
+      "count": 4,
+      "increment": 4,
+      "index": "1"
+     },
+     "kind": "register"
+    },
+    {
+     "name": "RELOAD2",
+     "address_offset": 88,
+     "size": 32,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Reload Register stores the Value the COUNT Register gets reloaded on a when a condition was met.",
+     "fields": [],
+     "dim": {
+      "count": 4,
+      "increment": 4,
+      "index": "2"
+     },
+     "kind": "register"
+    },
+    {
+     "name": "RELOAD3",
+     "address_offset": 92,
+     "size": 32,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Reload Register stores the Value the COUNT Register gets reloaded on a when a condition was met.",
+     "fields": [],
+     "dim": {
+      "count": 4,
+      "increment": 4,
+      "index": "3"
+     },
+     "kind": "register"
+    }
+   ],
+   "dim": null
+  },
+  {
+   "name": "TIMER2",
+   "base_address": 1073807872,
+   "description": "32 Timer / Counter, counting up or down from different sources",
+   "group_name": "TIMER",
+   "children": [
+    {
+     "name": "CR",
+     "address_offset": 0,
+     "size": 32,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 20152191,
+     "protection": null,
+     "description": "Control Register",
+     "fields": [
+      {
+       "name": "EN",
+       "bit_offset": 0,
+       "bit_width": 1,
+       "access": "read-write",
+       "description": "Enable",
+       "enumerated_values": [
+        {
+         "name": "Disable",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer is disabled and does not operate",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Enable",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer is enabled and can operate",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "RST",
+       "bit_offset": 1,
+       "bit_width": 1,
+       "access": "write-only",
+       "description": "Reset Timer",
+       "enumerated_values": [
+        {
+         "name": "Reserved",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Write as ZERO if necessary",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Reset_Timer",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Reset the Timer",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "CNT",
+       "bit_offset": 2,
+       "bit_width": 2,
+       "access": "read-write",
+       "description": "Counting direction",
+       "enumerated_values": [
+        {
+         "name": "Count_UP",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer Counts UO and wraps, if no STOP condition is set",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Count_DOWN",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer Counts DOWN and wraps, if no STOP condition is set",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Toggle",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Timer Counts up to MAX, then DOWN to ZERO, if no STOP condition is set",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "MODE",
+       "bit_offset": 4,
+       "bit_width": 3,
+       "access": "read-write",
+       "description": "Operation Mode",
+       "enumerated_values": [
+        {
+         "name": "Continous",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer runs continously",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Single_ZERO_MAX",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer counts to 0x00 or 0xFFFFFFFF (depending on CNT) and stops",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Single_MATCH",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Timer counts to the Value of MATCH Register and stops",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Reload_ZERO_MAX",
+         "value": 3,
+         "raw_value": "3",
+         "description": "Timer counts to 0x00 or 0xFFFFFFFF (depending on CNT), loads the RELOAD Value and continues",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Reload_MATCH",
+         "value": 4,
+         "raw_value": "4",
+         "description": "Timer counts to the Value of MATCH Register, loads the RELOAD Value and continues",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "PSC",
+       "bit_offset": 7,
+       "bit_width": 1,
+       "access": "read-write",
+       "description": "Use Prescaler",
+       "enumerated_values": [
+        {
+         "name": "Disabled",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Prescaler is not used",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Enabled",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Prescaler is used as divider",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "CNTSRC",
+       "bit_offset": 8,
+       "bit_width": 4,
+       "access": "read-write",
+       "description": "Timer / Counter Source Divider",
+       "enumerated_values": [
+        {
+         "name": "CAP_SRC",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Capture Source is used directly",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div2",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Capture Source is divided by 2",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div4",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Capture Source is divided by 4",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div8",
+         "value": 3,
+         "raw_value": "3",
+         "description": "Capture Source is divided by 8",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div16",
+         "value": 4,
+         "raw_value": "4",
+         "description": "Capture Source is divided by 16",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div32",
+         "value": 5,
+         "raw_value": "5",
+         "description": "Capture Source is divided by 32",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div64",
+         "value": 6,
+         "raw_value": "6",
+         "description": "Capture Source is divided by 64",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div128",
+         "value": 7,
+         "raw_value": "7",
+         "description": "Capture Source is divided by 128",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "CAP_SRC_div256",
+         "value": 8,
+         "raw_value": "8",
+         "description": "Capture Source is divided by 256",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "CAPSRC",
+       "bit_offset": 12,
+       "bit_width": 4,
+       "access": "read-write",
+       "description": "Timer / Counter Capture Source",
+       "enumerated_values": [
+        {
+         "name": "CClk",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Core Clock",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_0",
+         "value": 1,
+         "raw_value": "1",
+         "description": "GPIO A, PIN 0",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_1",
+         "value": 2,
+         "raw_value": "2",
+         "description": "GPIO A, PIN 1",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_2",
+         "value": 3,
+         "raw_value": "3",
+         "description": "GPIO A, PIN 2",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_3",
+         "value": 4,
+         "raw_value": "4",
+         "description": "GPIO A, PIN 3",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_4",
+         "value": 5,
+         "raw_value": "5",
+         "description": "GPIO A, PIN 4",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_5",
+         "value": 6,
+         "raw_value": "6",
+         "description": "GPIO A, PIN 5",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_6",
+         "value": 7,
+         "raw_value": "7",
+         "description": "GPIO A, PIN 6",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOA_7",
+         "value": 8,
+         "raw_value": "8",
+         "description": "GPIO A, PIN 7",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOB_0",
+         "value": 9,
+         "raw_value": "9",
+         "description": "GPIO B, PIN 0",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOB_1",
+         "value": 10,
+         "raw_value": "10",
+         "description": "GPIO B, PIN 1",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOB_2",
+         "value": 11,
+         "raw_value": "11",
+         "description": "GPIO B, PIN 2",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOB_3",
+         "value": 12,
+         "raw_value": "12",
+         "description": "GPIO B, PIN 3",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOC_0",
+         "value": 13,
+         "raw_value": "13",
+         "description": "GPIO C, PIN 0",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOC_5",
+         "value": 14,
+         "raw_value": "14",
+         "description": "GPIO C, PIN 1",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "GPIOC_6",
+         "value": 15,
+         "raw_value": "15",
+         "description": "GPIO C, PIN 2",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "CAPEDGE",
+       "bit_offset": 16,
+       "bit_width": 2,
+       "access": "read-write",
+       "description": "Capture Edge, select which Edge should result in a counter increment or decrement",
+       "enumerated_values": [
+        {
+         "name": "RISING",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Only rising edges result in a counter increment or decrement",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "FALLING",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Only falling edges  result in a counter increment or decrement",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "BOTH",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Rising and falling edges result in a counter increment or decrement",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "TRGEXT",
+       "bit_offset": 20,
+       "bit_width": 2,
+       "access": "read-write",
+       "description": "Triggers an other Peripheral",
+       "enumerated_values": [
+        {
+         "name": "NONE",
+         "value": 0,
+         "raw_value": "0",
+         "description": "No Trigger is emitted",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "DMA1",
+         "value": 1,
+         "raw_value": "1",
+         "description": "DMA Controller 1 is triggered, dependant on MODE",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "DMA2",
+         "value": 2,
+         "raw_value": "2",
+         "description": "DMA Controller 2 is triggered, dependant on MODE",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "UART",
+         "value": 3,
+         "raw_value": "3",
+         "description": "UART is triggered, dependant on MODE",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "RELOAD",
+       "bit_offset": 24,
+       "bit_width": 2,
+       "access": "read-write",
+       "description": "Select RELOAD Register n to reload Timer on condition",
+       "enumerated_values": [
+        {
+         "name": "RELOAD0",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Selects Reload Register number 0",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "RELOAD1",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Selects Reload Register number 1",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "RELOAD2",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Selects Reload Register number 2",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "RELOAD3",
+         "value": 3,
+         "raw_value": "3",
+         "description": "Selects Reload Register number 3",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "IDR",
+       "bit_offset": 26,
+       "bit_width": 2,
+       "access": "read-write",
+       "description": "Selects, if Reload Register number is incremented, decremented or not modified",
+       "enumerated_values": [
+        {
+         "name": "KEEP",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Reload Register number does not change automatically",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "INCREMENT",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Reload Register number is incremented on each match",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "DECREMENT",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Reload Register number is decremented on each match",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "S",
+       "bit_offset": 31,
+       "bit_width": 1,
+       "access": "read-write",
+       "description": "Starts and Stops the Timer / Counter",
+       "enumerated_values": [
+        {
+         "name": "STOP",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer / Counter is stopped",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "START",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer / Counter is started",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      }
+     ],
+     "dim": null,
+     "kind": "register"
+    },
+    {
+     "name": "SR",
+     "address_offset": 4,
+     "size": 16,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 55041,
+     "protection": null,
+     "description": "Status Register",
+     "fields": [
+      {
+       "name": "RUN",
+       "bit_offset": 0,
+       "bit_width": 1,
+       "access": "read-only",
+       "description": "Shows if Timer is running or not",
+       "enumerated_values": [
+        {
+         "name": "Stopped",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer is not running",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Running",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer is running",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "MATCH",
+       "bit_offset": 8,
+       "bit_width": 1,
+       "access": "read-write",
+       "description": "Shows if the MATCH was hit",
+       "enumerated_values": [
+        {
+         "name": "No_Match",
+         "value": 0,
+         "raw_value": "0",
+         "description": "The MATCH condition was not hit",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Match_Hit",
+         "value": 1,
+         "raw_value": "1",
+         "description": "The MATCH condition was hit",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "UN",
+       "bit_offset": 9,
+       "bit_width": 1,
+       "access": "read-write",
+       "description": "Shows if an underflow occured. This flag is sticky",
+       "enumerated_values": [
+        {
+         "name": "No_Underflow",
+         "value": 0,
+         "raw_value": "0",
+         "description": "No underflow occured since last clear",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Underflow",
+         "value": 1,
+         "raw_value": "1",
+         "description": "A minimum of one underflow occured since last clear",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "OV",
+       "bit_offset": 10,
+       "bit_width": 1,
+       "access": "read-write",
+       "description": "Shows if an overflow occured. This flag is sticky",
+       "enumerated_values": [
+        {
+         "name": "No_Overflow",
+         "value": 0,
+         "raw_value": "0",
+         "description": "No overflow occured since last clear",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Overflow_occured",
+         "value": 1,
+         "raw_value": "1",
+         "description": "A minimum of one overflow occured since last clear",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "RST",
+       "bit_offset": 12,
+       "bit_width": 1,
+       "access": "read-only",
+       "description": "Shows if Timer is in RESET state",
+       "enumerated_values": [
+        {
+         "name": "Ready",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer is not in RESET state and can operate",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "In_Reset",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer is in RESET state and can not operate",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "RELOAD",
+       "bit_offset": 14,
+       "bit_width": 2,
+       "access": "read-only",
+       "description": "Shows the currently active RELOAD Register",
+       "enumerated_values": [
+        {
+         "name": "RELOAD0",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Reload Register number 0 is active",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "RELOAD1",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Reload Register number 1 is active",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "RELOAD2",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Reload Register number 2 is active",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "RELOAD3",
+         "value": 3,
+         "raw_value": "3",
+         "description": "Reload Register number 3 is active",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      }
+     ],
+     "dim": null,
+     "kind": "register"
+    },
+    {
+     "name": "INT",
+     "address_offset": 16,
+     "size": 16,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 1905,
+     "protection": null,
+     "description": "Interrupt Register",
+     "fields": [
+      {
+       "name": "EN",
+       "bit_offset": 0,
+       "bit_width": 1,
+       "access": "read-write",
+       "description": "Interrupt Enable",
+       "enumerated_values": [
+        {
+         "name": "Disabled",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer does not generate Interrupts",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Enable",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer triggers the TIMERn Interrupt",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      },
+      {
+       "name": "MODE",
+       "bit_offset": 4,
+       "bit_width": 3,
+       "access": "read-write",
+       "description": "Interrupt Mode, selects on which condition the Timer should generate an Interrupt",
+       "enumerated_values": [
+        {
+         "name": "Match",
+         "value": 0,
+         "raw_value": "0",
+         "description": "Timer generates an Interrupt when the MATCH condition is hit",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Underflow",
+         "value": 1,
+         "raw_value": "1",
+         "description": "Timer generates an Interrupt when it underflows",
+         "is_default": false,
+         "usage": null
+        },
+        {
+         "name": "Overflow",
+         "value": 2,
+         "raw_value": "2",
+         "description": "Timer generates an Interrupt when it overflows",
+         "is_default": false,
+         "usage": null
+        }
+       ],
+       "dim": null
+      }
+     ],
+     "dim": null,
+     "kind": "register"
+    },
+    {
+     "name": "COUNT",
+     "address_offset": 32,
+     "size": 32,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Counter Register reflects the actual Value of the Timer/Counter",
+     "fields": [],
+     "dim": null,
+     "kind": "register"
+    },
+    {
+     "name": "MATCH",
+     "address_offset": 36,
+     "size": 32,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Match Register stores the compare Value for the MATCH condition",
+     "fields": [],
+     "dim": null,
+     "kind": "register"
+    },
+    {
+     "name": "PRESCALE_RD",
+     "address_offset": 40,
+     "size": 32,
+     "access": "read-only",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Prescale Register stores the Value for the prescaler. The cont event gets divided by this value",
+     "fields": [],
+     "dim": null,
+     "kind": "register"
+    },
+    {
+     "name": "PRESCALE_WR",
+     "address_offset": 40,
+     "size": 32,
+     "access": "write-only",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Prescale Register stores the Value for the prescaler. The cont event gets divided by this value",
+     "fields": [],
+     "dim": null,
+     "kind": "register"
+    },
+    {
+     "name": "RELOAD0",
+     "address_offset": 80,
+     "size": 32,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Reload Register stores the Value the COUNT Register gets reloaded on a when a condition was met.",
+     "fields": [],
+     "dim": {
+      "count": 4,
+      "increment": 4,
+      "index": "0"
+     },
+     "kind": "register"
+    },
+    {
+     "name": "RELOAD1",
+     "address_offset": 84,
+     "size": 32,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Reload Register stores the Value the COUNT Register gets reloaded on a when a condition was met.",
+     "fields": [],
+     "dim": {
+      "count": 4,
+      "increment": 4,
+      "index": "1"
+     },
+     "kind": "register"
+    },
+    {
+     "name": "RELOAD2",
+     "address_offset": 88,
+     "size": 32,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Reload Register stores the Value the COUNT Register gets reloaded on a when a condition was met.",
+     "fields": [],
+     "dim": {
+      "count": 4,
+      "increment": 4,
+      "index": "2"
+     },
+     "kind": "register"
+    },
+    {
+     "name": "RELOAD3",
+     "address_offset": 92,
+     "size": 32,
+     "access": "read-write",
+     "reset_value": 0,
+     "reset_mask": 4294967295,
+     "protection": null,
+     "description": "The Reload Register stores the Value the COUNT Register gets reloaded on a when a condition was met.",
+     "fields": [],
+     "dim": {
+      "count": 4,
+      "increment": 4,
+      "index": "3"
+     },
+     "kind": "register"
+    }
+   ],
+   "dim": null
+  }
+ ]
+}
