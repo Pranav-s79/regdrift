@@ -112,6 +112,37 @@ def test_bad_config_exits_two(tmp_path: Path) -> None:
     assert result.exit_code == 2
 
 
+def test_severity_override_downgrades_breaking(tmp_path: Path) -> None:
+    old = _write(tmp_path / "old.svd")
+    new = _write(tmp_path / "new.svd", ctrl_offset="0x4")
+    cfg = tmp_path / ".regdrift.toml"
+    cfg.write_text('[severity]\nRD001 = "WARNING"\n')
+    result = CliRunner().invoke(main, ["check", str(old), str(new), "--config", str(cfg)])
+    assert result.exit_code == 0
+    assert "WARNING" in result.output
+    assert "0 breaking, 1 warning" in result.output
+
+
+def test_severity_override_upgrades_warning(tmp_path: Path) -> None:
+    old = _write(tmp_path / "old.svd")
+    new = _write(tmp_path / "new.svd", ctrl_reset="0x5")
+    cfg = tmp_path / ".regdrift.toml"
+    cfg.write_text('[severity]\nRD010 = "BREAKING"\n')
+    result = CliRunner().invoke(main, ["check", str(old), str(new), "--config", str(cfg)])
+    assert result.exit_code == 1
+    assert "1 breaking" in result.output
+
+
+def test_allow_wins_over_severity_override(tmp_path: Path) -> None:
+    old = _write(tmp_path / "old.svd")
+    new = _write(tmp_path / "new.svd", ctrl_offset="0x4")
+    cfg = tmp_path / ".regdrift.toml"
+    cfg.write_text('allow = ["RD001:UART0.CTRL"]\n[severity]\nRD001 = "BREAKING"\n')
+    result = CliRunner().invoke(main, ["check", str(old), str(new), "--config", str(cfg)])
+    assert result.exit_code == 0
+    assert "ALLOWED" in result.output
+
+
 def test_safe_changes_reported_but_pass(tmp_path: Path) -> None:
     old = _write(tmp_path / "old.svd")
     new = _write(tmp_path / "new.svd", status_desc="Status register, clarified")
