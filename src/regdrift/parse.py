@@ -194,11 +194,11 @@ class _Resolver:
 
     def _lookup_dotted(self, parts: list[str], node: _Node) -> _Node | None:
         # Try absolute (from the device root) first, then relative to each
-        # enclosing scope from the innermost outward.
+        # enclosing scope from the innermost outward (nearest scope wins).
         starts: list[_Node] = [self._device]
         scope = node.parent
         while scope is not None:
-            starts.insert(1, scope)  # keep device first, then innermost-out
+            starts.append(scope)  # parent-chain order is already innermost-out
             scope = scope.parent
         for start in starts:
             cur: _Node | None = start

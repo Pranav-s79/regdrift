@@ -190,6 +190,35 @@ def _pair_same_name(
     return pairs
 
 
+def _pair_enum_group(
+    old_group: list[EnumeratedValue], new_group: list[EnumeratedValue]
+) -> tuple[
+    list[tuple[EnumeratedValue, EnumeratedValue]],
+    list[EnumeratedValue],
+    list[EnumeratedValue],
+]:
+    """Pair same-keyed enum entries: equal (value, raw) first, then by position.
+
+    Returns (pairs, removed_old_leftovers, added_new_leftovers).
+    """
+    pairs: list[tuple[EnumeratedValue, EnumeratedValue]] = []
+    new_free = list(new_group)
+    old_free: list[EnumeratedValue] = []
+    for o in old_group:
+        match = next(
+            (n for n in new_free if n.value == o.value and n.raw_value == o.raw_value), None
+        )
+        if match is not None:
+            pairs.append((o, match))
+            new_free.remove(match)
+        else:
+            old_free.append(o)
+    pairs.extend(zip(old_free, new_free, strict=False))
+    removed = old_free[len(new_free):]
+    added = new_free[len(old_free):]
+    return pairs, removed, added
+
+
 def _join(parent: str, name: str) -> str:
     return f"{parent}.{name}" if parent else name
 
@@ -256,38 +285,44 @@ def _diff_enums(
     parent_path: str,
     changes: list[Change],
 ) -> None:
-    # Keyed by (usage, name): a field may carry separate read and write
-    # enumeratedValues containers with same-named entries, and those must
-    # diff independently (keying by name alone silently drops one side).
-    # A container-usage flip therefore reads as removed+added.
-    old_by_key = {(e.usage, e.name): e for e in old_enums}
-    new_by_key = {(e.usage, e.name): e for e in new_enums}
-    for key, old_e in old_by_key.items():
-        path = _join(parent_path, old_e.name)
-        new_e = new_by_key.get(key)
-        if new_e is None:
-            changes.append(Change(kind="removed", element="enum", path=path))
-            continue
-        old_value = old_e.value if old_e.value is not None else old_e.raw_value
-        new_value = new_e.value if new_e.value is not None else new_e.raw_value
-        for attribute, before, after in (
-            ("value", old_value, new_value),
-            ("description", old_e.description, new_e.description),
-            ("is_default", old_e.is_default, new_e.is_default),
-        ):
-            if before != after:
-                changes.append(
-                    Change(
-                        kind="modified",
-                        element="enum",
-                        path=path,
-                        attribute=attribute,
-                        before=before,
-                        after=after,
+    # Keyed by (usage, name) with group-lists, mirroring _diff_level: a field
+    # may carry separate read and write containers with same-named entries,
+    # and a single container may legally repeat a name — neither may collapse
+    # (a last-wins dict silently produced clean diffs on removals). Within a
+    # same-key group, pair equal values first, then positionally.
+    old_groups: dict[tuple[str | None, str], list[EnumeratedValue]] = {}
+    for e in old_enums:
+        old_groups.setdefault((e.usage, e.name), []).append(e)
+    new_groups: dict[tuple[str | None, str], list[EnumeratedValue]] = {}
+    for e in new_enums:
+        new_groups.setdefault((e.usage, e.name), []).append(e)
+
+    for key, old_group in old_groups.items():
+        path = _join(parent_path, key[1])
+        new_group = new_groups.get(key, [])
+        pairs, removed, added = _pair_enum_group(old_group, new_group)
+        for old_e, new_e in pairs:
+            old_value = old_e.value if old_e.value is not None else old_e.raw_value
+            new_value = new_e.value if new_e.value is not None else new_e.raw_value
+            for attribute, before, after in (
+                ("value", old_value, new_value),
+                ("description", old_e.description, new_e.description),
+                ("is_default", old_e.is_default, new_e.is_default),
+            ):
+                if before != after:
+                    changes.append(
+                        Change(
+                            kind="modified",
+                            element="enum",
+                            path=path,
+                            attribute=attribute,
+                            before=before,
+                            after=after,
+                        )
                     )
-                )
-    for key, new_e in new_by_key.items():
-        if key not in old_by_key:
-            changes.append(
-                Change(kind="added", element="enum", path=_join(parent_path, new_e.name))
-            )
+        changes.extend(Change(kind="removed", element="enum", path=path) for _ in removed)
+        changes.extend(Change(kind="added", element="enum", path=path) for _ in added)
+    for key, new_group in new_groups.items():
+        if key not in old_groups:
+            path = _join(parent_path, key[1])
+            changes.extend(Change(kind="added", element="enum", path=path) for _ in new_group)
