@@ -1,5 +1,7 @@
 # regdrift
 
+[![CI](https://github.com/Pranav-s79/regdrift/actions/workflows/ci.yml/badge.svg)](https://github.com/Pranav-s79/regdrift/actions/workflows/ci.yml)
+
 Diff two CMSIS-SVD register map files and classify every change as
 **BREAKING**, **WARNING**, or **SAFE** — like `buf breaking`, but for
 hardware registers. Runs as a CLI and as a GitHub Action CI gate.
