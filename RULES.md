@@ -27,6 +27,8 @@ reported as **ALLOWED** and never fail the check.
 | RD009 | Register size changed | Load/store width no longer matches the hardware; reads can fault or truncate. |
 | RD015 | Interrupt renumbered | The vector-table slot moves; old code installs its handler in the wrong entry and NVIC calls target the wrong line. |
 | RD016 | Interrupt removed | Generated vector tables and IRQ enums lose the entry; handler registration silently dangles. |
+| RD017 | Write semantics changed (modifiedWriteValues) | A oneToClear ↔ oneToSet flip inverts what writing 1 does; old flag-clearing code now sets the flag. |
+| RD018 | Read side effect changed (readAction) | Reads that now clear (or stop clearing) state silently break polling and debug code. |
 
 ## WARNING
 

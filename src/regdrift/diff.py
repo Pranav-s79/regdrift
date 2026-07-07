@@ -340,14 +340,30 @@ def _compare(old: _Item, new: _Item, parent_path: str, changes: list[Change]) ->
     if isinstance(old, Register) and isinstance(new, Register):
         if old.address_offset != new.address_offset:
             modified("address_offset", old.address_offset, new.address_offset, kind="moved")
-        for attr in ("size", "access", "reset_value", "reset_mask", "protection", "description"):
+        for attr in (
+            "size",
+            "access",
+            "reset_value",
+            "reset_mask",
+            "protection",
+            "description",
+            "modified_write_values",
+            "read_action",
+        ):
             if getattr(old, attr) != getattr(new, attr):
                 modified(attr, getattr(old, attr), getattr(new, attr))
         _diff_level(old.fields, new.fields, path, changes)
         return
 
     if isinstance(old, Field) and isinstance(new, Field):
-        for attr in ("bit_offset", "bit_width", "access", "description"):
+        for attr in (
+            "bit_offset",
+            "bit_width",
+            "access",
+            "description",
+            "modified_write_values",
+            "read_action",
+        ):
             if getattr(old, attr) != getattr(new, attr):
                 modified(attr, getattr(old, attr), getattr(new, attr))
         _diff_enums(old.enumerated_values, new.enumerated_values, path, changes)

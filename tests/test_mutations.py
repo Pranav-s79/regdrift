@@ -181,6 +181,22 @@ def set_protection(dev: Device) -> tuple[str, str]:
     return "RD014", path
 
 
+def flip_write_semantics(dev: Device) -> tuple[str, str]:
+    path, reg = _first_reg_with_unique_fields(dev)
+    field = reg.fields[0]
+    field.modified_write_values = (
+        "oneToClear" if field.modified_write_values != "oneToClear" else "oneToSet"
+    )
+    return "RD017", f"{path}.{field.name}"
+
+
+def add_read_side_effect(dev: Device) -> tuple[str, str]:
+    path, reg = _first_reg_with_unique_fields(dev)
+    field = reg.fields[0]
+    field.read_action = "clear" if field.read_action != "clear" else "set"
+    return "RD018", f"{path}.{field.name}"
+
+
 def renumber_interrupt(dev: Device) -> tuple[str, str]:
     p = next(p for p in dev.peripherals if p.interrupts)
     irq = p.interrupts[0]
@@ -228,6 +244,8 @@ MUTATIONS: dict[str, Mutation] = {
     "change_reset_mask": change_reset_mask,
     "remove_enum_value": remove_enum_value,
     "set_protection": set_protection,
+    "flip_write_semantics": flip_write_semantics,
+    "add_read_side_effect": add_read_side_effect,
     "renumber_interrupt": renumber_interrupt,
     "remove_interrupt": remove_interrupt,
     "add_register": add_register,

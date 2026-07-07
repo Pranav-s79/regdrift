@@ -44,6 +44,8 @@ class Field:
     bit_width: int
     access: str | None = None  # resolved: own value or inherited from register
     description: str | None = None
+    modified_write_values: str = "modify"  # spec default; e.g. oneToClear, oneToSet
+    read_action: str | None = None  # None = reads have no side effect
     enumerated_values: list[EnumeratedValue] = field(default_factory=list)
     dim: DimInfo | None = None
 
@@ -58,6 +60,8 @@ class Register:
     reset_mask: int | None = None
     protection: str | None = None
     description: str | None = None
+    modified_write_values: str = "modify"  # spec default; e.g. oneToClear, oneToSet
+    read_action: str | None = None  # None = reads have no side effect
     fields: list[Field] = field(default_factory=list)
     dim: DimInfo | None = None
     kind: str = "register"  # discriminator for Register | Cluster in JSON

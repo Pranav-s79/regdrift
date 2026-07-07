@@ -432,6 +432,8 @@ def _build_fields(reg_node: _Node, reg_access: str) -> list[Field]:
                     bit_width=bit_width,
                     access=access,
                     description=props.get("description") or None,
+                    modified_write_values=props.get("modifiedWriteValues") or "modify",
+                    read_action=props.get("readAction") or None,
                     enumerated_values=_build_enums(fnode),
                     dim=dim_info,
                 )
@@ -455,6 +457,8 @@ def _build_registers(node: _Node, inherited: _RegProps) -> list[Register]:
                 reset_mask=own.reset_mask,
                 protection=own.protection,
                 description=props.get("description") or None,
+                modified_write_values=props.get("modifiedWriteValues") or "modify",
+                read_action=props.get("readAction") or None,
                 fields=_build_fields(node, own.access),
                 dim=dim_info,
             )

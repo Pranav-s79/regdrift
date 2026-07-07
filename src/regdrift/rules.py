@@ -147,6 +147,20 @@ def _classify(c: Change) -> Finding:
         return finding(
             "RD009", BREAKING, f"register {c.path} size changed {c.before} -> {c.after}"
         )
+    if c.attribute == "modified_write_values":
+        return finding(
+            "RD017",
+            BREAKING,
+            f"{c.element} {c.path} write semantics changed {c.before} -> {c.after} "
+            "(what writing a bit does is inverted or altered)",
+        )
+    if c.attribute == "read_action":
+        return finding(
+            "RD018",
+            BREAKING,
+            f"{c.element} {c.path} read side effect changed "
+            f"{c.before or 'none'} -> {c.after or 'none'}",
+        )
     if c.attribute == "reset_value":
         return finding(
             "RD010",
