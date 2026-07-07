@@ -10,7 +10,7 @@ license = "Apache-2.0"
 license-files = ["LICENSE"]
 requires-python = ">=3.11"
 authors = [{ name = "Pranav Senthilkumar", email = "pranav.senthilkumar79@gmail.com" }]
-dependencies = ["click>=8.1"]
+dependencies = ["click>=8.1,<9"]
 dynamic = ["version"]
 keywords = ["svd", "cmsis", "registers", "embedded", "diff", "breaking-change", "ci"]
 classifiers = [
@@ -32,7 +32,7 @@ Issues = "https://github.com/Pranav-s79/regdrift/issues"
 regdrift = "regdrift.cli:main"
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "ruff>=0.5", "mypy>=1.10"]
+dev = ["pytest>=9.0,<10", "ruff>=0.5,<1", "mypy>=1.10,<2"]
 
 [tool.hatch.version]
 path = "src/regdrift/__init__.py"
