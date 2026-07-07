@@ -9,6 +9,7 @@ in RULES.md.
 """
 
 import copy
+import re
 from collections.abc import Callable, Iterator
 from functools import cache
 from pathlib import Path
@@ -231,3 +232,17 @@ def test_mutation_fires_exact_rule(svd_name: str, mutation_name: str) -> None:
     assert (rule_id, path) in hits, (
         f"{mutation_name} on {svd_name}: expected {rule_id} at {path}, got {hits[:10]}"
     )
+
+
+def test_every_rule_has_mutation_coverage() -> None:
+    """Coverage gate: every rule ID published in RULES.md fires in this harness."""
+    rulebook = set(re.findall(r"RD\d{3}", (Path(__file__).parent.parent / "RULES.md").read_text()))
+    assert rulebook, "RULES.md defines no rule IDs?"
+    device = _parse(FILES[0])
+    covered = set()
+    for mutate in MUTATIONS.values():
+        mutated = copy.deepcopy(device)
+        rule_id, _path = mutate(mutated)
+        covered.add(rule_id)
+    missing = rulebook - covered
+    assert not missing, f"rules without mutation coverage: {sorted(missing)}"
