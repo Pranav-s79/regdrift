@@ -85,7 +85,11 @@ def _classify(c: Change) -> Finding:
         if c.element == "field":
             return finding("RD008", BREAKING, f"field {c.path} removed")
         if c.element == "enum":
-            return finding("RD013", WARNING, f"enumerated value {c.path} removed")
+            return finding(
+                "RD013",
+                BREAKING,
+                f"enumerated value {c.path} removed (generated enum types lose the variant)",
+            )
         if c.element == "interrupt":
             return finding("RD016", BREAKING, f"interrupt {c.path} removed")
         return finding("RD002", BREAKING, f"{c.element} {c.path} removed")
@@ -104,10 +108,15 @@ def _classify(c: Change) -> Finding:
         )
 
     if c.kind == "renamed":
+        basis = (
+            "exact structural match"
+            if c.confidence == 1.0
+            else "heuristic match: descriptions differ"
+        )
         return finding(
             "RD005",
             BREAKING,
-            f"{c.element} renamed {c.before} -> {c.after} (confidence {c.confidence})",
+            f"{c.element} {c.path} renamed (was {c.before}; {basis})",
         )
 
     # kind == "modified"
@@ -120,16 +129,23 @@ def _classify(c: Change) -> Finding:
             f"interrupt {c.path} renumbered {c.before} -> {c.after}",
         )
     if c.element == "enum":
+        if c.attribute == "value":
+            return finding(
+                "RD011",
+                BREAKING,
+                f"enumerated value {c.path} changed {c.before!r} -> {c.after!r} "
+                "(the same name now writes different bits)",
+            )
         return finding(
-            "RD011",
+            "RD022",
             WARNING,
             f"enumerated value {c.path} {c.attribute} changed {c.before!r} -> {c.after!r}",
         )
-    if c.attribute in ("bit_offset", "bit_width"):
+    if c.attribute == "bit_range":
         return finding(
             "RD003",
             BREAKING,
-            f"field {c.path} {c.attribute} changed {c.before} -> {c.after}",
+            f"field {c.path} bit range changed {c.before} -> {c.after}",
         )
     if c.attribute == "access":
         lost = _caps(c.before) - _caps(c.after)

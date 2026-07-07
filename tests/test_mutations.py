@@ -163,6 +163,12 @@ def change_enum_value(dev: Device) -> tuple[str, str]:
     return "RD011", f"{field_path}.{enum.name}"
 
 
+def flip_enum_default(dev: Device) -> tuple[str, str]:
+    field_path, _field, enum = _first_unique_enum(dev)
+    enum.is_default = not enum.is_default
+    return "RD022", f"{field_path}.{enum.name}"
+
+
 def change_reset_mask(dev: Device) -> tuple[str, str]:
     path, _parent, _i, reg = next(_registers(dev))
     reg.reset_mask = (reg.reset_mask or 0) ^ 0xFF
@@ -241,6 +247,7 @@ MUTATIONS: dict[str, Mutation] = {
     "change_register_size": change_register_size,
     "change_reset_value": change_reset_value,
     "change_enum_value": change_enum_value,
+    "flip_enum_default": flip_enum_default,
     "change_reset_mask": change_reset_mask,
     "remove_enum_value": remove_enum_value,
     "set_protection": set_protection,

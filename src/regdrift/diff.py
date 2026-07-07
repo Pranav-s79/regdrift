@@ -295,6 +295,10 @@ def _pair_enum_group(
     return pairs, removed, added
 
 
+def _bit_range_str(f: Field) -> str:
+    return f"[{f.bit_offset + f.bit_width - 1}:{f.bit_offset}]"
+
+
 def _join(parent: str, name: str) -> str:
     return f"{parent}.{name}" if parent else name
 
@@ -356,14 +360,11 @@ def _compare(old: _Item, new: _Item, parent_path: str, changes: list[Change]) ->
         return
 
     if isinstance(old, Field) and isinstance(new, Field):
-        for attr in (
-            "bit_offset",
-            "bit_width",
-            "access",
-            "description",
-            "modified_write_values",
-            "read_action",
-        ):
+        # bit position and width report as one [msb:lsb] range change — the
+        # notation embedded engineers actually read
+        if (old.bit_offset, old.bit_width) != (new.bit_offset, new.bit_width):
+            modified("bit_range", _bit_range_str(old), _bit_range_str(new))
+        for attr in ("access", "description", "modified_write_values", "read_action"):
             if getattr(old, attr) != getattr(new, attr):
                 modified(attr, getattr(old, attr), getattr(new, attr))
         _diff_enums(old.enumerated_values, new.enumerated_values, path, changes)

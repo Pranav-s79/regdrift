@@ -97,9 +97,9 @@ def test_field_bit_position_modified(make_device: MakeDevice) -> None:
             kind="modified",
             element="field",
             path="UART0.CTRL.MODE",
-            attribute="bit_offset",
-            before=2,
-            after=4,
+            attribute="bit_range",
+            before="[3:2]",
+            after="[5:4]",
         )
     ]
 
@@ -113,9 +113,9 @@ def test_field_bit_width_modified(make_device: MakeDevice) -> None:
             kind="modified",
             element="field",
             path="UART0.CTRL.MODE",
-            attribute="bit_width",
-            before=2,
-            after=3,
+            attribute="bit_range",
+            before="[3:2]",
+            after="[4:2]",
         )
     ]
 
