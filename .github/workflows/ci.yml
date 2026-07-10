@@ -24,7 +24,7 @@ jobs:
         run: python -m pip install -e ".[dev]"
 
       - name: Cache SVD corpus
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: tests/corpus
           key: svd-corpus-${{ hashFiles('scripts/fetch_corpus.py') }}
