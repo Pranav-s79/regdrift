@@ -1,0 +1,31 @@
+name: Action self-test
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  selftest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Stage a breaking SVD change as git history
+        run: |
+          cp demo/chip_v1.svd selftest_chip.svd
+          git -c user.email=ci@regdrift -c user.name=selftest add selftest_chip.svd
+          git -c user.email=ci@regdrift -c user.name=selftest commit -m "selftest base"
+          cp demo/chip_v2.svd selftest_chip.svd
+      - name: Run the action against the staged change (must fail)
+        id: gate
+        continue-on-error: true
+        uses: ./
+        with:
+          svd-path: selftest_chip.svd
+          base-ref: HEAD
+          comment: "false"
+      - name: Assert the gate failed as intended
+        run: |
+          if [ "${{ steps.gate.outcome }}" != "failure" ]; then
+            echo "::error::action self-test expected failure, got ${{ steps.gate.outcome }}"; exit 1
+          fi

@@ -14,6 +14,33 @@ WARNING = "WARNING"
 SAFE = "SAFE"
 ALLOWED = "ALLOWED"
 
+RULE_IDS = frozenset(
+    {
+        "RD001",
+        "RD002",
+        "RD003",
+        "RD004",
+        "RD005",
+        "RD006",
+        "RD007",
+        "RD008",
+        "RD009",
+        "RD010",
+        "RD011",
+        "RD012",
+        "RD013",
+        "RD014",
+        "RD015",
+        "RD016",
+        "RD017",
+        "RD018",
+        "RD020",
+        "RD021",
+        "RD022",
+        "RD030",
+    }
+)
+
 # access string -> capability set (RULES.md "Notes")
 _ACCESS_CAPS = {
     "read-only": frozenset({"read"}),
@@ -52,14 +79,17 @@ def classify_changes(
             finding.severity = severity_overrides[finding.rule_id]
         if any(_allows(rule, path, finding) for rule, path in allow_entries):
             finding.allowed = True
-            finding.severity = ALLOWED
         findings.append(finding)
     return findings
 
 
 def _parse_allow(entry: str) -> tuple[str, str | None]:
     rule, sep, path = entry.partition(":")
-    return rule.strip(), (path.strip() if sep else None)
+    rule = rule.strip()
+    normalized_path = path.strip() if sep else None
+    if rule not in RULE_IDS or (sep and not normalized_path):
+        raise ValueError(f"invalid allow entry: {entry!r}")
+    return rule, normalized_path
 
 
 def _allows(rule: str, path: str | None, finding: Finding) -> bool:
@@ -85,7 +115,13 @@ def _classify(c: Change) -> Finding:
         if c.element == "field":
             return finding("RD008", BREAKING, f"field {c.path} removed")
         if c.element == "enum":
-            return finding("RD013", WARNING, f"enumerated value {c.path} removed")
+            return finding(
+                "RD013",
+                BREAKING,
+                f"enumerated value {c.path} removed (generated enum types lose the variant)",
+            )
+        if c.element == "interrupt":
+            return finding("RD016", BREAKING, f"interrupt {c.path} removed")
         return finding("RD002", BREAKING, f"{c.element} {c.path} removed")
 
     if c.kind == "moved":
@@ -102,26 +138,44 @@ def _classify(c: Change) -> Finding:
         )
 
     if c.kind == "renamed":
+        basis = (
+            "exact structural match"
+            if c.confidence == 1.0
+            else "heuristic match: descriptions differ"
+        )
         return finding(
             "RD005",
             BREAKING,
-            f"{c.element} renamed {c.before} -> {c.after} (confidence {c.confidence})",
+            f"{c.element} {c.path} renamed (was {c.before}; {basis})",
         )
 
     # kind == "modified"
     if c.attribute == "description":
         return finding("RD030", SAFE, f"{c.element} {c.path} description changed")
-    if c.element == "enum":
+    if c.element == "interrupt":
         return finding(
-            "RD011",
+            "RD015",
+            BREAKING,
+            f"interrupt {c.path} renumbered {c.before} -> {c.after}",
+        )
+    if c.element == "enum":
+        if c.attribute == "value":
+            return finding(
+                "RD011",
+                BREAKING,
+                f"enumerated value {c.path} changed {c.before!r} -> {c.after!r} "
+                "(the same name now writes different bits)",
+            )
+        return finding(
+            "RD022",
             WARNING,
             f"enumerated value {c.path} {c.attribute} changed {c.before!r} -> {c.after!r}",
         )
-    if c.attribute in ("bit_offset", "bit_width"):
+    if c.attribute == "bit_range":
         return finding(
             "RD003",
             BREAKING,
-            f"field {c.path} {c.attribute} changed {c.before} -> {c.after}",
+            f"field {c.path} bit range changed {c.before} -> {c.after}",
         )
     if c.attribute == "access":
         lost = _caps(c.before) - _caps(c.after)
@@ -138,6 +192,20 @@ def _classify(c: Change) -> Finding:
     if c.attribute == "size":
         return finding(
             "RD009", BREAKING, f"register {c.path} size changed {c.before} -> {c.after}"
+        )
+    if c.attribute == "modified_write_values":
+        return finding(
+            "RD017",
+            BREAKING,
+            f"{c.element} {c.path} write semantics changed {c.before} -> {c.after} "
+            "(what writing a bit does is inverted or altered)",
+        )
+    if c.attribute == "read_action":
+        return finding(
+            "RD018",
+            BREAKING,
+            f"{c.element} {c.path} read side effect changed "
+            f"{c.before or 'none'} -> {c.after or 'none'}",
         )
     if c.attribute == "reset_value":
         return finding(

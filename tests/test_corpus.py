@@ -71,6 +71,15 @@ def test_arm_sample_timer1_derived_from_timer0() -> None:
     assert cr.fields  # register structure copied from TIMER0
 
 
+def test_arm_sample_interrupts() -> None:
+    dev = load("ARM_Sample.svd")
+    timer0 = periph(dev, "TIMER0")
+    assert [(i.name, i.value) for i in timer0.interrupts] == [("TIMER0", 0)]
+    # TIMER1 derives from TIMER0 but declares its own interrupt line
+    timer1 = periph(dev, "TIMER1")
+    assert [(i.name, i.value) for i in timer1.interrupts] == [("TIMER1", 4)]
+
+
 # --- nRF52840 (Nordic PS): clusters and dim arrays ----------------------------
 
 

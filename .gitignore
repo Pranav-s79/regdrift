@@ -4,17 +4,60 @@ __pycache__/
 *.egg-info/
 dist/
 build/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
 
 # Environments
 .venv/
+venv/
+env/
 
 # Tool caches
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+.tox/
+.nox/
 
 # Test corpus: real vendor SVDs, fetched by scripts/fetch_corpus.py
 tests/corpus/
 
-# Editor/tool droppings
+# Secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+secrets.json
+
+# Local agent and tool overrides (shared configuration remains tracked)
+AGENTS.override.md
+AGENTS.local.md
+CLAUDE.local.md
+.claude/settings.local.json
+.codex/*.local.*
+.regdrift.local.toml
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*.orig
+tmp/
+temp/
+
+# Editor, OS, and local tool state
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
 .vigil/

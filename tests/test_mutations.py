@@ -19,7 +19,7 @@ import pytest
 from regdrift.diff import diff_devices
 from regdrift.model import Cluster, Device, EnumeratedValue, Field, Register
 from regdrift.parse import parse_svd
-from regdrift.rules import classify_changes
+from regdrift.rules import RULE_IDS, classify_changes
 
 CORPUS = Path(__file__).parent / "corpus"
 FILES = ["nrf52.svd", "rp2040.svd", "MK64F12.svd"]
@@ -163,6 +163,12 @@ def change_enum_value(dev: Device) -> tuple[str, str]:
     return "RD011", f"{field_path}.{enum.name}"
 
 
+def flip_enum_default(dev: Device) -> tuple[str, str]:
+    field_path, _field, enum = _first_unique_enum(dev)
+    enum.is_default = not enum.is_default
+    return "RD022", f"{field_path}.{enum.name}"
+
+
 def change_reset_mask(dev: Device) -> tuple[str, str]:
     path, _parent, _i, reg = next(_registers(dev))
     reg.reset_mask = (reg.reset_mask or 0) ^ 0xFF
@@ -179,6 +185,35 @@ def set_protection(dev: Device) -> tuple[str, str]:
     path, _parent, _i, reg = next(_registers(dev))
     reg.protection = "s" if reg.protection != "s" else "n"
     return "RD014", path
+
+
+def flip_write_semantics(dev: Device) -> tuple[str, str]:
+    path, reg = _first_reg_with_unique_fields(dev)
+    field = reg.fields[0]
+    field.modified_write_values = (
+        "oneToClear" if field.modified_write_values != "oneToClear" else "oneToSet"
+    )
+    return "RD017", f"{path}.{field.name}"
+
+
+def add_read_side_effect(dev: Device) -> tuple[str, str]:
+    path, reg = _first_reg_with_unique_fields(dev)
+    field = reg.fields[0]
+    field.read_action = "clear" if field.read_action != "clear" else "set"
+    return "RD018", f"{path}.{field.name}"
+
+
+def renumber_interrupt(dev: Device) -> tuple[str, str]:
+    p = next(p for p in dev.peripherals if p.interrupts)
+    irq = p.interrupts[0]
+    irq.value += 100
+    return "RD015", f"{p.name}.{irq.name}"
+
+
+def remove_interrupt(dev: Device) -> tuple[str, str]:
+    p = next(p for p in dev.peripherals if p.interrupts)
+    irq = p.interrupts.pop(0)
+    return "RD016", f"{p.name}.{irq.name}"
 
 
 def add_register(dev: Device) -> tuple[str, str]:
@@ -212,9 +247,14 @@ MUTATIONS: dict[str, Mutation] = {
     "change_register_size": change_register_size,
     "change_reset_value": change_reset_value,
     "change_enum_value": change_enum_value,
+    "flip_enum_default": flip_enum_default,
     "change_reset_mask": change_reset_mask,
     "remove_enum_value": remove_enum_value,
     "set_protection": set_protection,
+    "flip_write_semantics": flip_write_semantics,
+    "add_read_side_effect": add_read_side_effect,
+    "renumber_interrupt": renumber_interrupt,
+    "remove_interrupt": remove_interrupt,
     "add_register": add_register,
     "grant_write_access": grant_write_access,
     "change_description": change_description,
@@ -238,6 +278,7 @@ def test_every_rule_has_mutation_coverage() -> None:
     """Coverage gate: every rule ID published in RULES.md fires in this harness."""
     rulebook = set(re.findall(r"RD\d{3}", (Path(__file__).parent.parent / "RULES.md").read_text()))
     assert rulebook, "RULES.md defines no rule IDs?"
+    assert rulebook == RULE_IDS, "runtime rule catalog and RULES.md differ"
     device = _parse(FILES[0])
     covered = set()
     for mutate in MUTATIONS.values():

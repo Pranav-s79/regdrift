@@ -15,14 +15,17 @@ Allowlisting wins over severity overrides: an allowed finding reports as
 ALLOWED regardless of any [severity] entry.
 """
 
-import re
 import tomllib
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
+
+from regdrift.rules import RULE_IDS
 
 DEFAULT_CONFIG = Path(".regdrift.toml")
 
 _VALID_SEVERITIES = ("BREAKING", "WARNING", "SAFE")
+_VALID_TOP_LEVEL_KEYS = frozenset({"allow", "severity"})
 
 
 class ConfigError(Exception):
@@ -33,6 +36,17 @@ class ConfigError(Exception):
 class Config:
     allow: list[str] = field(default_factory=list)
     severity_overrides: dict[str, str] = field(default_factory=dict)
+
+
+def validate_allow_entries(entries: Sequence[str], source: str) -> None:
+    """Reject allowlist entries that cannot match a published finding."""
+    for entry in entries:
+        rule_id, separator, path = entry.partition(":")
+        rule_id = rule_id.strip()
+        if rule_id not in RULE_IDS:
+            raise ConfigError(f"{source}: unknown rule ID {rule_id!r} in allow entry {entry!r}")
+        if separator and not path.strip():
+            raise ConfigError(f"{source}: allow entry {entry!r} has an empty path")
 
 
 def load_config(config_path: Path | None = None) -> Config:
@@ -53,16 +67,22 @@ def load_config(config_path: Path | None = None) -> Config:
     except tomllib.TOMLDecodeError as exc:
         raise ConfigError(f"invalid TOML in {config_path}: {exc}") from exc
 
+    unknown_keys = sorted(set(data) - _VALID_TOP_LEVEL_KEYS)
+    if unknown_keys:
+        rendered = ", ".join(repr(key) for key in unknown_keys)
+        raise ConfigError(f"{config_path}: unknown top-level key(s): {rendered}")
+
     allow = data.get("allow", [])
     if not isinstance(allow, list) or not all(isinstance(entry, str) for entry in allow):
         raise ConfigError(f"{config_path}: 'allow' must be a list of strings")
+    validate_allow_entries(allow, str(config_path))
 
     overrides = data.get("severity", {})
     if not isinstance(overrides, dict):
         raise ConfigError(f"{config_path}: 'severity' must be a table of RDxxx = severity")
     for rule_id, severity in overrides.items():
-        if not re.fullmatch(r"RD\d{3}", rule_id):
-            raise ConfigError(f"{config_path}: invalid rule ID {rule_id!r} in [severity]")
+        if rule_id not in RULE_IDS:
+            raise ConfigError(f"{config_path}: unknown rule ID {rule_id!r} in [severity]")
         if severity not in _VALID_SEVERITIES:
             raise ConfigError(
                 f"{config_path}: severity for {rule_id} must be one of "

@@ -12,6 +12,11 @@ def _one(change: Change, allow: list[str] | None = None) -> tuple[str, str]:
     return findings[0].rule_id, findings[0].severity
 
 
+def test_invalid_allow_entry_is_rejected() -> None:
+    with pytest.raises(ValueError, match="invalid allow entry"):
+        classify_changes([], allow=["RD999"])
+
+
 @pytest.mark.parametrize(
     ("change", "rule_id", "severity"),
     [
@@ -36,10 +41,13 @@ def _one(change: Change, allow: list[str] | None = None) -> tuple[str, str]:
         (Change("removed", "cluster", "P.C"), "RD002", "BREAKING"),
         (Change("removed", "peripheral", "P"), "RD007", "BREAKING"),
         (Change("removed", "field", "P.R.F"), "RD008", "BREAKING"),
-        (Change("removed", "enum", "P.R.F.E"), "RD013", "WARNING"),
-        # bit layout
-        (Change("modified", "field", "P.R.F", "bit_offset", 0, 1), "RD003", "BREAKING"),
-        (Change("modified", "field", "P.R.F", "bit_width", 1, 2), "RD003", "BREAKING"),
+        (Change("removed", "enum", "P.R.F.E"), "RD013", "BREAKING"),
+        # bit layout (reported as one [msb:lsb] range change)
+        (
+            Change("modified", "field", "P.R.F", "bit_range", "[3:2]", "[5:4]"),
+            "RD003",
+            "BREAKING",
+        ),
         # access capability
         (
             Change("modified", "register", "P.R", "access", "read-write", "read-only"),
@@ -83,9 +91,8 @@ def _one(change: Change, allow: list[str] | None = None) -> tuple[str, str]:
         (Change("modified", "register", "P.R", "reset_mask", 0xFF, 0), "RD012", "WARNING"),
         (Change("modified", "register", "P.R", "protection", None, "s"), "RD014", "WARNING"),
         # enums
-        (Change("modified", "enum", "P.R.F.E", "value", 0, 1), "RD011", "WARNING"),
-        (Change("modified", "enum", "P.R.F.E", "is_default", False, True), "RD011", "WARNING"),
-        (Change("modified", "enum", "P.R.F.E", "usage", "read", "write"), "RD011", "WARNING"),
+        (Change("modified", "enum", "P.R.F.E", "value", 0, 1), "RD011", "BREAKING"),
+        (Change("modified", "enum", "P.R.F.E", "is_default", False, True), "RD022", "WARNING"),
         # additions
         (Change("added", "register", "P.R"), "RD020", "SAFE"),
         (Change("added", "field", "P.R.F"), "RD020", "SAFE"),
@@ -102,18 +109,32 @@ def test_rule_mapping(change: Change, rule_id: str, severity: str) -> None:
 
 def test_allow_by_rule_and_path() -> None:
     change = Change("moved", "register", "UART0.CTRL", "address_offset", 0, 4)
-    rule_id, severity = _one(change, allow=["RD001:UART0.CTRL"])
-    assert (rule_id, severity) == ("RD001", "ALLOWED")
+    findings = classify_changes([change], allow=["RD001:UART0.CTRL"])
+    assert (findings[0].rule_id, findings[0].severity, findings[0].allowed) == (
+        "RD001",
+        "BREAKING",
+        True,
+    )
 
 
 def test_allow_whole_rule() -> None:
     change = Change("moved", "register", "UART0.CTRL", "address_offset", 0, 4)
-    assert _one(change, allow=["RD001"]) == ("RD001", "ALLOWED")
+    findings = classify_changes([change], allow=["RD001"])
+    assert (findings[0].rule_id, findings[0].severity, findings[0].allowed) == (
+        "RD001",
+        "BREAKING",
+        True,
+    )
 
 
 def test_allow_wrong_path_does_not_match() -> None:
     change = Change("moved", "register", "UART0.CTRL", "address_offset", 0, 4)
-    assert _one(change, allow=["RD001:SPI0.CTRL"]) == ("RD001", "BREAKING")
+    findings = classify_changes([change], allow=["RD001:SPI0.CTRL"])
+    assert (findings[0].rule_id, findings[0].severity, findings[0].allowed) == (
+        "RD001",
+        "BREAKING",
+        False,
+    )
 
 
 def test_allow_wrong_rule_does_not_match() -> None:

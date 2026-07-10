@@ -112,6 +112,14 @@ def test_bad_config_exits_two(tmp_path: Path) -> None:
     assert result.exit_code == 2
 
 
+def test_bad_allow_flag_exits_two(tmp_path: Path) -> None:
+    old = _write(tmp_path / "old.svd")
+    new = _write(tmp_path / "new.svd")
+    result = CliRunner().invoke(main, ["check", str(old), str(new), "--allow", "RD999"])
+    assert result.exit_code == 2
+    assert "unknown rule ID" in result.output
+
+
 def test_severity_override_downgrades_breaking(tmp_path: Path) -> None:
     old = _write(tmp_path / "old.svd")
     new = _write(tmp_path / "new.svd", ctrl_offset="0x4")
@@ -147,6 +155,14 @@ def test_safe_changes_reported_but_pass(tmp_path: Path) -> None:
     old = _write(tmp_path / "old.svd")
     new = _write(tmp_path / "new.svd", status_desc="Status register, clarified")
     result = CliRunner().invoke(main, ["check", str(old), str(new)])
+    assert result.exit_code == 0
+    assert "1 safe" in result.output
+
+
+def test_safe_changes_listed_with_all_flag(tmp_path: Path) -> None:
+    old = _write(tmp_path / "old.svd")
+    new = _write(tmp_path / "new.svd", status_desc="Status register, clarified")
+    result = CliRunner().invoke(main, ["check", str(old), str(new), "--all"])
     assert result.exit_code == 0
     assert "RD030" in result.output
     assert "1 safe" in result.output

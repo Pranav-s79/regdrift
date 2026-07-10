@@ -32,6 +32,7 @@ from regdrift.model import (
     DimInfo,
     EnumeratedValue,
     Field,
+    Interrupt,
     Peripheral,
     Register,
 )
@@ -58,12 +59,16 @@ class _Node:
     props: dict[str, str] = dc_field(default_factory=dict)
     derived_from: str | None = None
     children: list["_Node"] = dc_field(default_factory=list, repr=False)
+    # peripheral-only: <interrupt> elements, kept apart from `children` so
+    # that a derived peripheral defining an interrupt (but no registers)
+    # still inherits the base's registers wholesale
+    interrupts: list["_Node"] = dc_field(default_factory=list, repr=False)
     parent: "_Node | None" = dc_field(default=None, repr=False, compare=False)
 
 
 # Which child *element* tags each node kind owns (everything else with no
 # sub-elements is treated as a simple text prop; unknown complex elements
-# like <interrupt> or <addressBlock> are ignored).
+# like <addressBlock> or <writeConstraint> are ignored).
 _CHILD_TAGS: dict[str, frozenset[str]] = {
     "device": frozenset({"peripheral"}),
     "peripheral": frozenset({"register", "cluster"}),
@@ -72,6 +77,7 @@ _CHILD_TAGS: dict[str, frozenset[str]] = {
     "field": frozenset({"enumeratedValues"}),
     "enumeratedValues": frozenset({"enumeratedValue"}),
     "enumeratedValue": frozenset(),
+    "interrupt": frozenset(),
 }
 
 # Transparent grouping wrappers, per parent tag.
@@ -80,6 +86,9 @@ _WRAPPERS: dict[str, frozenset[str]] = {
     "peripheral": frozenset({"registers"}),
     "register": frozenset({"fields"}),
 }
+
+# Field bit-range styles are mutually exclusive during derivedFrom merging.
+_BIT_RANGE_KEYS = frozenset({"bitOffset", "bitWidth", "lsb", "msb", "bitRange"})
 
 
 def _local(tag: str) -> str:
@@ -104,11 +113,15 @@ def _raw_node(el: ET.Element, tag: str, parent_path: str, index: int) -> _Node:
             if ctag in child_tags:
                 count += 1
                 node.children.append(_raw_node(child, ctag, container_path, count))
+            elif tag == "peripheral" and ctag == "interrupt":
+                node.interrupts.append(
+                    _raw_node(child, "interrupt", container_path, len(node.interrupts) + 1)
+                )
             elif ctag in wrappers:
                 consume(child, f"{container_path}/{ctag}")
             elif len(child) == 0:
                 node.props[ctag] = (child.text or "").strip()
-            # complex elements we don't model (interrupt, addressBlock, cpu,
+            # complex elements we don't model (addressBlock, cpu,
             # writeConstraint, dimArrayIndex, ...) are skipped
 
     consume(el, node.path)
@@ -152,8 +165,20 @@ class _Resolver:
                     node.children = [
                         self._clone(c, node, base.path, node.path) for c in base.children
                     ]
+                if not node.interrupts and base.interrupts:
+                    node.interrupts = [
+                        self._clone(i, node, base.path, node.path) for i in base.interrupts
+                    ]
+                # The bit-range props form one exclusive group: a derived
+                # field that defines its own range (in any of the three
+                # styles) must not inherit pieces of the base's style, or
+                # e.g. a base bitOffset would shadow a derived bitRange.
+                skip: frozenset[str] = frozenset()
+                if node.tag == "field" and _BIT_RANGE_KEYS & node.props.keys():
+                    skip = _BIT_RANGE_KEYS
                 for key, value in base.props.items():
-                    node.props.setdefault(key, value)
+                    if key not in skip:
+                        node.props.setdefault(key, value)
                 node.derived_from = None
             for child in node.children:
                 self._ensure_resolved(child)
@@ -170,6 +195,7 @@ class _Resolver:
             parent=parent,
         )
         new.children = [self._clone(c, new, old_prefix, new_prefix) for c in node.children]
+        new.interrupts = [self._clone(i, new, old_prefix, new_prefix) for i in node.interrupts]
         return new
 
     def _lookup(self, ref: str, node: _Node) -> _Node:
@@ -183,11 +209,11 @@ class _Resolver:
 
     def _lookup_dotted(self, parts: list[str], node: _Node) -> _Node | None:
         # Try absolute (from the device root) first, then relative to each
-        # enclosing scope from the innermost outward.
+        # enclosing scope from the innermost outward (nearest scope wins).
         starts: list[_Node] = [self._device]
         scope = node.parent
         while scope is not None:
-            starts.insert(1, scope)  # keep device first, then innermost-out
+            starts.append(scope)  # parent-chain order is already innermost-out
             scope = scope.parent
         for start in starts:
             cur: _Node | None = start
@@ -203,6 +229,11 @@ class _Resolver:
     def _lookup_scoped(self, ref: str, node: _Node) -> _Node | None:
         scope = node.parent
         while scope is not None:
+            # unqualified refs never cross peripheral boundaries (the spec
+            # reserves that for dotted names) — only peripherals themselves
+            # resolve at device scope
+            if scope.tag == "device" and node.tag != "peripheral":
+                return None
             found = self._find_named(scope, node.tag, ref, node)
             if found is not None:
                 return found
@@ -210,9 +241,11 @@ class _Resolver:
         return None
 
     def _find_named(self, scope: _Node, tag: str, ref: str, skip: _Node) -> _Node | None:
+        # same-scope siblings win over matches buried in nested clusters
         for child in scope.children:
             if child is not skip and child.tag == tag and child.props.get("name") == ref:
                 return child
+        for child in scope.children:
             found = self._find_named(child, tag, ref, skip)
             if found is not None:
                 return found
@@ -319,7 +352,9 @@ def _expand(node: _Node) -> list[tuple[str, int, DimInfo | None]]:
 def _build_enums(field_node: _Node) -> list[EnumeratedValue]:
     enums: list[EnumeratedValue] = []
     for container in field_node.children:
-        usage = container.props.get("usage") or None
+        # spec default: an omitted <usage> means read-write; normalize so an
+        # explicit-vs-omitted difference never diffs as a change
+        usage = container.props.get("usage") or "read-write"
         for entry in container.children:
             props = entry.props
             raw_value = props.get("value") or None
@@ -397,6 +432,8 @@ def _build_fields(reg_node: _Node, reg_access: str) -> list[Field]:
                     bit_width=bit_width,
                     access=access,
                     description=props.get("description") or None,
+                    modified_write_values=props.get("modifiedWriteValues") or "modify",
+                    read_action=props.get("readAction") or None,
                     enumerated_values=_build_enums(fnode),
                     dim=dim_info,
                 )
@@ -420,6 +457,8 @@ def _build_registers(node: _Node, inherited: _RegProps) -> list[Register]:
                 reset_mask=own.reset_mask,
                 protection=own.protection,
                 description=props.get("description") or None,
+                modified_write_values=props.get("modifiedWriteValues") or "modify",
+                read_action=props.get("readAction") or None,
                 fields=_build_fields(node, own.access),
                 dim=dim_info,
             )
@@ -455,6 +494,19 @@ def _build_children(node: _Node, inherited: _RegProps) -> list[Register | Cluste
     return children
 
 
+def _build_interrupts(node: _Node) -> list[Interrupt]:
+    interrupts = []
+    for inode in node.interrupts:
+        interrupts.append(
+            Interrupt(
+                name=_req(inode.props, "name", inode.path),
+                value=_to_int(_req(inode.props, "value", inode.path), "value", inode.path),
+                description=inode.props.get("description") or None,
+            )
+        )
+    return interrupts
+
+
 def _build_peripherals(node: _Node, inherited: _RegProps) -> list[Peripheral]:
     props = node.props
     own = _overlay(inherited, props, node.path)
@@ -468,6 +520,7 @@ def _build_peripherals(node: _Node, inherited: _RegProps) -> list[Peripheral]:
                 description=props.get("description") or None,
                 group_name=props.get("groupName") or None,
                 children=_build_children(node, own),
+                interrupts=_build_interrupts(node),
                 dim=dim_info,
             )
         )
@@ -531,6 +584,8 @@ def parse_svd(path: str | Path) -> Device:
     """Parse an SVD file into the fully resolved canonical model."""
     try:
         tree = ET.parse(path)
+    except OSError as exc:
+        raise SvdParseError(f"cannot read SVD: {exc}", str(path)) from exc
     except ET.ParseError as exc:
         raise SvdParseError(f"malformed XML: {exc}", str(path)) from exc
     return _parse_root(tree.getroot())

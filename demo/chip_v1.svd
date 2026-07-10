@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<device schemaVersion="1.1">
+  <name>DEMOCHIP</name>
+  <version>1.0</version>
+  <description>Demo device for regdrift</description>
+  <addressUnitBits>8</addressUnitBits>
+  <width>32</width>
+  <size>32</size>
+  <access>read-write</access>
+  <resetValue>0x0</resetValue>
+  <resetMask>0xFFFFFFFF</resetMask>
+  <peripherals>
+    <peripheral>
+      <name>ACCEL</name>
+      <description>Matrix accelerator control block</description>
+      <baseAddress>0x40040000</baseAddress>
+      <interrupt>
+        <name>ACCEL_DONE</name>
+        <value>17</value>
+      </interrupt>
+      <registers>
+        <register>
+          <name>CTRL</name>
+          <description>Control</description>
+          <addressOffset>0x0</addressOffset>
+          <fields>
+            <field><name>EN</name><bitOffset>0</bitOffset><bitWidth>1</bitWidth></field>
+            <field><name>MODE</name><bitOffset>1</bitOffset><bitWidth>2</bitWidth></field>
+          </fields>
+        </register>
+        <register>
+          <name>STATUS</name>
+          <description>Status flags</description>
+          <addressOffset>0x8</addressOffset>
+          <resetValue>0x1</resetValue>
+          <fields>
+            <field>
+              <name>DONE</name><bitOffset>0</bitOffset><bitWidth>1</bitWidth>
+              <modifiedWriteValues>oneToClear</modifiedWriteValues>
+            </field>
+          </fields>
+        </register>
+      </registers>
+    </peripheral>
+  </peripherals>
+</device>

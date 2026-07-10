@@ -26,6 +26,7 @@ from regdrift.model import (
     Device,
     EnumeratedValue,
     Field,
+    Interrupt,
     Peripheral,
     Register,
 )
@@ -190,6 +191,114 @@ def _pair_same_name(
     return pairs
 
 
+def _diff_interrupts(
+    old_ints: list[Interrupt],
+    new_ints: list[Interrupt],
+    parent_path: str,
+    changes: list[Change],
+) -> None:
+    # Group-lists by name (never a collapsing dict — see _diff_enums); within
+    # a name group, pair equal vector values first, then positionally.
+    old_groups: dict[str, list[Interrupt]] = {}
+    for i in old_ints:
+        old_groups.setdefault(i.name, []).append(i)
+    new_groups: dict[str, list[Interrupt]] = {}
+    for i in new_ints:
+        new_groups.setdefault(i.name, []).append(i)
+
+    for name, old_group in old_groups.items():
+        path = _join(parent_path, name)
+        new_group = new_groups.get(name, [])
+        new_free = list(new_group)
+        old_free: list[Interrupt] = []
+        for o in old_group:
+            match = next((n for n in new_free if n.value == o.value), None)
+            if match is not None:
+                new_free.remove(match)
+                if o.description != match.description:
+                    changes.append(
+                        Change(
+                            kind="modified",
+                            element="interrupt",
+                            path=path,
+                            attribute="description",
+                            before=o.description,
+                            after=match.description,
+                        )
+                    )
+            else:
+                old_free.append(o)
+        for o, n in zip(old_free, new_free, strict=False):
+            changes.append(
+                Change(
+                    kind="modified",
+                    element="interrupt",
+                    path=path,
+                    attribute="value",
+                    before=o.value,
+                    after=n.value,
+                )
+            )
+            if o.description != n.description:
+                changes.append(
+                    Change(
+                        kind="modified",
+                        element="interrupt",
+                        path=path,
+                        attribute="description",
+                        before=o.description,
+                        after=n.description,
+                    )
+                )
+        changes.extend(
+            Change(kind="removed", element="interrupt", path=path)
+            for _ in old_free[len(new_free):]
+        )
+        changes.extend(
+            Change(kind="added", element="interrupt", path=path)
+            for _ in new_free[len(old_free):]
+        )
+    for name, new_group in new_groups.items():
+        if name not in old_groups:
+            path = _join(parent_path, name)
+            changes.extend(
+                Change(kind="added", element="interrupt", path=path) for _ in new_group
+            )
+
+
+def _pair_enum_group(
+    old_group: list[EnumeratedValue], new_group: list[EnumeratedValue]
+) -> tuple[
+    list[tuple[EnumeratedValue, EnumeratedValue]],
+    list[EnumeratedValue],
+    list[EnumeratedValue],
+]:
+    """Pair same-keyed enum entries: equal (value, raw) first, then by position.
+
+    Returns (pairs, removed_old_leftovers, added_new_leftovers).
+    """
+    pairs: list[tuple[EnumeratedValue, EnumeratedValue]] = []
+    new_free = list(new_group)
+    old_free: list[EnumeratedValue] = []
+    for o in old_group:
+        match = next(
+            (n for n in new_free if n.value == o.value and n.raw_value == o.raw_value), None
+        )
+        if match is not None:
+            pairs.append((o, match))
+            new_free.remove(match)
+        else:
+            old_free.append(o)
+    pairs.extend(zip(old_free, new_free, strict=False))
+    removed = old_free[len(new_free):]
+    added = new_free[len(old_free):]
+    return pairs, removed, added
+
+
+def _bit_range_str(f: Field) -> str:
+    return f"[{f.bit_offset + f.bit_width - 1}:{f.bit_offset}]"
+
+
 def _join(parent: str, name: str) -> str:
     return f"{parent}.{name}" if parent else name
 
@@ -220,6 +329,7 @@ def _compare(old: _Item, new: _Item, parent_path: str, changes: list[Change]) ->
             modified("base_address", old.base_address, new.base_address, kind="moved")
         if old.description != new.description:
             modified("description", old.description, new.description)
+        _diff_interrupts(old.interrupts, new.interrupts, path, changes)
         _diff_level(old.children, new.children, path, changes)
         return
 
@@ -234,14 +344,27 @@ def _compare(old: _Item, new: _Item, parent_path: str, changes: list[Change]) ->
     if isinstance(old, Register) and isinstance(new, Register):
         if old.address_offset != new.address_offset:
             modified("address_offset", old.address_offset, new.address_offset, kind="moved")
-        for attr in ("size", "access", "reset_value", "reset_mask", "protection", "description"):
+        for attr in (
+            "size",
+            "access",
+            "reset_value",
+            "reset_mask",
+            "protection",
+            "description",
+            "modified_write_values",
+            "read_action",
+        ):
             if getattr(old, attr) != getattr(new, attr):
                 modified(attr, getattr(old, attr), getattr(new, attr))
         _diff_level(old.fields, new.fields, path, changes)
         return
 
     if isinstance(old, Field) and isinstance(new, Field):
-        for attr in ("bit_offset", "bit_width", "access", "description"):
+        # bit position and width report as one [msb:lsb] range change — the
+        # notation embedded engineers actually read
+        if (old.bit_offset, old.bit_width) != (new.bit_offset, new.bit_width):
+            modified("bit_range", _bit_range_str(old), _bit_range_str(new))
+        for attr in ("access", "description", "modified_write_values", "read_action"):
             if getattr(old, attr) != getattr(new, attr):
                 modified(attr, getattr(old, attr), getattr(new, attr))
         _diff_enums(old.enumerated_values, new.enumerated_values, path, changes)
@@ -256,33 +379,44 @@ def _diff_enums(
     parent_path: str,
     changes: list[Change],
 ) -> None:
-    old_by_name = {e.name: e for e in old_enums}
-    new_by_name = {e.name: e for e in new_enums}
-    for name, old_e in old_by_name.items():
-        path = _join(parent_path, name)
-        new_e = new_by_name.get(name)
-        if new_e is None:
-            changes.append(Change(kind="removed", element="enum", path=path))
-            continue
-        old_value = old_e.value if old_e.value is not None else old_e.raw_value
-        new_value = new_e.value if new_e.value is not None else new_e.raw_value
-        for attribute, before, after in (
-            ("value", old_value, new_value),
-            ("description", old_e.description, new_e.description),
-            ("is_default", old_e.is_default, new_e.is_default),
-            ("usage", old_e.usage, new_e.usage),
-        ):
-            if before != after:
-                changes.append(
-                    Change(
-                        kind="modified",
-                        element="enum",
-                        path=path,
-                        attribute=attribute,
-                        before=before,
-                        after=after,
+    # Keyed by (usage, name) with group-lists, mirroring _diff_level: a field
+    # may carry separate read and write containers with same-named entries,
+    # and a single container may legally repeat a name — neither may collapse
+    # (a last-wins dict silently produced clean diffs on removals). Within a
+    # same-key group, pair equal values first, then positionally.
+    old_groups: dict[tuple[str | None, str], list[EnumeratedValue]] = {}
+    for e in old_enums:
+        old_groups.setdefault((e.usage, e.name), []).append(e)
+    new_groups: dict[tuple[str | None, str], list[EnumeratedValue]] = {}
+    for e in new_enums:
+        new_groups.setdefault((e.usage, e.name), []).append(e)
+
+    for key, old_group in old_groups.items():
+        path = _join(parent_path, key[1])
+        new_group = new_groups.get(key, [])
+        pairs, removed, added = _pair_enum_group(old_group, new_group)
+        for old_e, new_e in pairs:
+            old_value = old_e.value if old_e.value is not None else old_e.raw_value
+            new_value = new_e.value if new_e.value is not None else new_e.raw_value
+            for attribute, before, after in (
+                ("value", old_value, new_value),
+                ("description", old_e.description, new_e.description),
+                ("is_default", old_e.is_default, new_e.is_default),
+            ):
+                if before != after:
+                    changes.append(
+                        Change(
+                            kind="modified",
+                            element="enum",
+                            path=path,
+                            attribute=attribute,
+                            before=before,
+                            after=after,
+                        )
                     )
-                )
-    for name in new_by_name:
-        if name not in old_by_name:
-            changes.append(Change(kind="added", element="enum", path=_join(parent_path, name)))
+        changes.extend(Change(kind="removed", element="enum", path=path) for _ in removed)
+        changes.extend(Change(kind="added", element="enum", path=path) for _ in added)
+    for key, new_group in new_groups.items():
+        if key not in old_groups:
+            path = _join(parent_path, key[1])
+            changes.extend(Change(kind="added", element="enum", path=path) for _ in new_group)
