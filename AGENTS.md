@@ -1,7 +1,7 @@
-# Claude Code adapter
+# Codex adapter
 
-This file is the Claude Code-facing repository adapter. Shared project facts
-and working rules live in
+This file is the Codex-facing repository adapter. Shared project facts and
+working rules live in
 [docs/agent-operating-model.md](docs/agent-operating-model.md); read it before
 planning or changing code.
 
@@ -12,6 +12,6 @@ Use these authoritative sources as required:
 - [CONTRIBUTING.md](CONTRIBUTING.md) and
   [pyproject.toml](pyproject.toml) for setup and validation.
 
-Keep Claude-specific configuration under `.claude/`. Do not modify Codex
+Keep Codex-only configuration under `.codex/`. Do not modify Claude-specific
 settings, skills, or agents unless the task explicitly requires cross-tool
 alignment. Report missing evidence rather than guessing.
