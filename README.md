@@ -1,110 +1,247 @@
 # regdrift
 
 [![CI](https://github.com/Pranav-s79/regdrift/actions/workflows/ci.yml/badge.svg)](https://github.com/Pranav-s79/regdrift/actions/workflows/ci.yml)
+[![Action self-test](https://github.com/Pranav-s79/regdrift/actions/workflows/action-selftest.yml/badge.svg)](https://github.com/Pranav-s79/regdrift/actions/workflows/action-selftest.yml)
+[![Python 3.11–3.12](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue.svg)](https://www.python.org/)
 
-Silicon revisions move registers. Here's how that plays out: in week 3 the
-vendor ships rev B of the SVD and one register nudges from offset 0x40 to
-0x44 — your driver still compiles, CI stays green, and every write lands on
-the wrong register. In week 6 someone finds it with a logic analyzer.
-**regdrift is the CI gate that catches it in the pull request instead.**
+**regdrift is a compatibility gate for CMSIS-SVD register maps.** It compares
+two silicon descriptions, classifies every detected change as `BREAKING`,
+`WARNING`, or `SAFE`, and returns a CI-friendly verdict.
 
-Like `buf breaking`, but for hardware register maps: diff two CMSIS-SVD
-files, classify every change as BREAKING / WARNING / SAFE against a
-published rulebook, and fail the build on unallowed breakage.
+A moved register can leave a driver compiling cleanly while every write lands
+at the wrong address. regdrift catches that change in the pull request, before
+it becomes a logic-analyzer debugging session.
 
-## Install
+> **Status:** `0.1.0a1` is an unreleased public alpha. The implementation is
+> exercised against 15 pinned vendor SVDs, but the explicit limitations in
+> [RULES.md](RULES.md#what-regdrift-does-not-check-yet) still apply.
+
+## Highlights
+
+- Resolves `derivedFrom`, register-property inheritance, nested clusters,
+  `dim` arrays, enumerated values, interrupts, and read/write side effects.
+- Uses deterministic structural matching with conservative rename detection.
+- Applies a published 22-rule contract: 15 `BREAKING`, 4 `WARNING`, and 3
+  `SAFE` rules.
+- Produces ranked text, schema-versioned JSON, or GitHub workflow annotations.
+- Supports exact-path allowlisting, project-wide severity overrides, stdin for
+  the baseline file, and configurable failure thresholds.
+- Ships as both a Python CLI and a composite GitHub Action.
+- Has unit, CLI, mutation, fuzz, golden, real-vendor corpus, and performance
+  coverage on Python 3.11 and 3.12.
+
+## Installation
+
+No PyPI release has been published yet. Install the current alpha from source:
 
 ```sh
-pip install regdrift
+git clone https://github.com/Pranav-s79/regdrift.git
+cd regdrift
+python -m venv .venv
+# POSIX: source .venv/bin/activate
+# Windows PowerShell: .venv\Scripts\Activate.ps1
+python -m pip install .
 ```
 
+For development, install the editable package and validation tools instead:
+
 ```sh
+python -m pip install -e ".[dev]"
+python scripts/fetch_corpus.py
+```
+
+After a release is published, the standard installations will be:
+
+```sh
+python -m pip install regdrift
+# or
 pipx install regdrift
 ```
 
-## 30 seconds
+## Quick start with the synthetic data
+
+The committed [`demo/`](demo/) folder contains two revisions of an imaginary
+accelerator. The candidate moves a register, renames a field, renumbers an
+interrupt, changes write semantics and a reset value, and adds a register.
 
 ```sh
-regdrift check old.svd new.svd                       # human report
-regdrift check old.svd new.svd --format json          # for tooling
-git show origin/main:chip.svd | regdrift check - chip.svd   # against the base branch
+regdrift check demo/chip_v1.svd demo/chip_v2.svd
 ```
 
-```
-BREAKING (1)
-  RD007  peripheral SPI0 removed
+```text
+BREAKING (4)
+  RD015  interrupt ACCEL.ACCEL_DONE renumbered 17 -> 18
+  RD005  field ACCEL.CTRL.ENABLE renamed (was EN; exact structural match)
+  RD001  register ACCEL.STATUS address moved 0x8 -> 0xC
+  RD017  field ACCEL.STATUS.DONE write semantics changed oneToClear -> oneToSet (what writing a bit does is inverted or altered)
 
 WARNING (1)
-  RD010  register UART0.DATA reset value changed 0x0 -> 0x5
+  RD010  register ACCEL.STATUS reset value changed 0x1 -> 0x0
 
-ALLOWED (1)
-  RD001  register UART0.CTRL address moved 0x0 -> 0x4
+1 safe (1 added) - use --all to list
 
-2 safe (1 added, 1 description-only) - use --all to list
-1 breaking, 1 warning, 2 safe, 1 allowed
+4 breaking, 1 warning, 1 safe, 0 allowed
 ```
 
-Exit `0` = clean or allowed-only, `1` = unallowed breakage (`--fail-on
-warning` tightens this), `2` = tool error.
+The command exits `1` because the candidate contains unallowed breaking
+changes. Run it with `--all` to list the safe addition too.
 
-## The rulebook
+## CLI
 
-Every finding maps to one rule ID documented with a one-sentence rationale
-in [RULES.md](RULES.md): 14 BREAKING, 4 WARNING, 3 SAFE. RULES.md also
-lists what regdrift does **not** check yet — read it before trusting the
-gate. Acknowledge an intentional break instead of disabling the gate:
-`.regdrift.toml` takes `allow = ["RD001:UART0.CTRL"]` to suppress a specific
-finding. A `[severity]` table re-ranks a whole rule (e.g. downgrade RD013
-if your toolchain never generates enum types).
+| Command | Purpose |
+| --- | --- |
+| `regdrift parse DEVICE.svd` | Validate and summarize a resolved SVD model. |
+| `regdrift parse DEVICE.svd --json` | Emit the canonical model as JSON. |
+| `regdrift diff OLD.svd NEW.svd` | List factual structural changes without policy. |
+| `regdrift diff OLD.svd NEW.svd --format json` | Emit the raw change list as JSON. |
+| `regdrift check OLD.svd NEW.svd` | Classify changes and enforce the compatibility gate. |
 
-## In CI
-
-```yaml
-- uses: actions/checkout@v4
-  with: { fetch-depth: 0 }
-- run: pip install regdrift
-- run: |
-    git show "origin/${{ github.base_ref }}:chip.svd" > /tmp/base.svd
-    regdrift check /tmp/base.svd chip.svd --format github
-```
-
-Or use the bundled action - same check, plus annotations and a sticky PR comment:
-
-```yaml
-- uses: actions/checkout@v4
-  with: { fetch-depth: 0 }
-- uses: Pranav-s79/regdrift@main
-  with:
-    svd-path: chip.svd
-```
-
-Pin `@main` to a release tag once v0.1.0-alpha ships. Requires `fetch-depth: 0` and, for the comment, `permissions: pull-requests: write`.
-
-## Related tools
-
-[svdtools](https://github.com/rust-embedded/svdtools) `htmlcompare` renders
-human-readable comparisons of SVD files, and ARM's SVDConv validates single
-files. regdrift does neither of those jobs — it is the CI gate: a
-classified breaking-change verdict with exit codes, an allowlist, and a
-rulebook you can argue with. Use them together.
-
-## Status
-
-Alpha. The parser resolves the full public cmsis-svd-data corpus (STM32,
-nRF52, Kinetis, LPC, SAMD21, RP2040, ...), every rule is covered by a
-mutation-test harness against real vendor files, and identity diffs are
-empty corpus-wide. It has not yet survived contact with other people's
-workflows — that is what this release is for. File issues generously.
-
-## Development
+Useful gate options:
 
 ```sh
-python -m venv .venv
-.venv/Scripts/pip install -e ".[dev]"   # POSIX: .venv/bin/pip
-python scripts/fetch_corpus.py          # pull vendor SVD test corpus
+# Show SAFE findings instead of rolling them up.
+regdrift check old.svd new.svd --all
+
+# Fail on warnings as well as breaking changes.
+regdrift check old.svd new.svd --fail-on warning
+
+# Produce stable machine-readable output.
+regdrift check old.svd new.svd --format json
+
+# Emit GitHub workflow commands.
+regdrift check old.svd new.svd --format github
+
+# Read the baseline from stdin.
+git show origin/main:device.svd | regdrift check - device.svd
+```
+
+`check` uses these exit codes:
+
+| Code | Meaning |
+| --- | --- |
+| `0` | No unallowed finding meets the failure threshold. |
+| `1` | At least one unallowed finding meets the failure threshold. |
+| `2` | The SVD, configuration, path, or command input is invalid. |
+
+## Rulebook and configuration
+
+[RULES.md](RULES.md) is the normative compatibility contract. Every emitted
+change must map to exactly one documented rule or classification fails
+explicitly.
+
+Create `.regdrift.toml` in the working directory to acknowledge intentional
+breaks or adjust policy for a specific toolchain:
+
+```toml
+allow = [
+  "RD001:UART0.CTRL", # this rule at this exact path
+  "RD030",            # this rule at every path
+]
+
+[severity]
+RD013 = "WARNING"    # enum removals do not break this project's generator
+RD010 = "BREAKING"   # reset-value drift must fail this project
+```
+
+Command-line entries add to the file allowlist:
+
+```sh
+regdrift check old.svd new.svd --allow RD001:UART0.CTRL --allow RD030
+```
+
+Configuration is strict: unknown keys, unpublished rule IDs, malformed allow
+entries, and invalid severities are tool errors rather than silent no-ops.
+Allowlisting wins over severity overrides and is reported separately as
+`ALLOWED`.
+
+## GitHub Actions
+
+The bundled action extracts the baseline SVD from the pull request's base ref,
+runs the gate, writes a step summary, adds workflow annotations, and can update
+a sticky pull-request comment.
+
+```yaml
+name: Register-map compatibility
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  regdrift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: Pranav-s79/regdrift@main
+        with:
+          svd-path: hardware/device.svd
+          fail-on: breaking
+```
+
+The action installs the source at the selected action ref by default, so its
+runtime and action definition stay in sync. Set the optional `version` input to
+an exact published package version when a release is available. Disable the
+sticky comment with `comment: "false"` if the workflow only has read access.
+
+For a fully manual workflow, install the package and run:
+
+```sh
+regdrift check /tmp/base.svd hardware/device.svd --format github
+```
+
+## Output contracts
+
+- Text output is optimized for review: breaking findings first, then warnings,
+  allowed findings, and a safe-change rollup.
+- JSON output includes `schema_version: 1`, device metadata, summary counts,
+  the verdict, and every finding. See [docs/json-schema.md](docs/json-schema.md).
+- GitHub output escapes untrusted paths and SVD-derived text and caps each
+  annotation severity at nine entries to keep workflow output usable.
+
+## Architecture
+
+```text
+SVD/XML -> canonical parser -> structural diff -> rule classification -> report -> exit code
+```
+
+Parsing, factual diffing, policy classification, rendering, and CLI
+orchestration are separate modules. See [docs/architecture.md](docs/architecture.md)
+for ownership boundaries and testing strategy.
+
+## Data and verification
+
+- [`demo/`](demo/) is committed, deterministic synthetic data. Regenerate it
+  with `python scripts/make_demo.py`; CI verifies its generated content.
+- `tests/corpus/` is a gitignored, pinned 15-file vendor corpus downloaded by
+  `python scripts/fetch_corpus.py`.
+- `tests/golden/` locks canonical parser output for selected corpus files.
+- The mutation harness proves that every published rule fires against real
+  vendor models.
+
+Run the same checks enforced by CI:
+
+```sh
+ruff check .
+mypy
 pytest
 ```
 
+Contributor setup and change requirements are documented in
+[CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Project documentation
+
+- [RULES.md](RULES.md) — severities, rationales, calibration, and limitations
+- [docs/architecture.md](docs/architecture.md) — module boundaries and test strategy
+- [docs/json-schema.md](docs/json-schema.md) — machine-readable output contract
+- [CHANGELOG.md](CHANGELOG.md) — release history
+- [docs/release-checklist.md](docs/release-checklist.md) — maintainer release runbook
+
 ## License
 
-Apache-2.0
+Apache-2.0. See [LICENSE](LICENSE).

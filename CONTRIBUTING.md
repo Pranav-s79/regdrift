@@ -1,6 +1,7 @@
 # Contributing to regdrift
 
-Thanks for your interest! regdrift is early; issues and small PRs are very welcome.
+Thanks for your interest. regdrift is an alpha compatibility tool, so focused
+issues and small, evidence-backed pull requests are especially valuable.
 
 ## Dev setup
 
@@ -8,7 +9,7 @@ Thanks for your interest! regdrift is early; issues and small PRs are very welco
 git clone https://github.com/Pranav-s79/regdrift
 cd regdrift
 python -m venv .venv
-.venv/bin/pip install -e ".[dev]"        # Windows: .venv\Scripts\pip
+python -m pip install -e ".[dev]"
 python scripts/fetch_corpus.py           # real vendor SVD test corpus (~29 MB, gitignored)
 ```
 

@@ -18,8 +18,8 @@ def test_demo_files_match_generator(tmp_path: Path) -> None:
         check=True,
     )
     for name in ("chip_v1.svd", "chip_v2.svd", "README.md"):
-        generated = (tmp_path / name).read_bytes()
-        committed = (DEMO_DIR / name).read_bytes()
+        generated = (tmp_path / name).read_text()
+        committed = (DEMO_DIR / name).read_text()
         assert generated == committed, f"demo/{name} is out of sync with make_demo.py"
 
 
