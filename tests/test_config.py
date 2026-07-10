@@ -47,6 +47,21 @@ def test_allow_must_be_string_list(tmp_path: Path) -> None:
         load_config(cfg)
 
 
+@pytest.mark.parametrize("entry", ["RD999", "NOT_A_RULE", "RD001:"])
+def test_invalid_allow_entry_raises(tmp_path: Path, entry: str) -> None:
+    cfg = tmp_path / ".regdrift.toml"
+    cfg.write_text(f'allow = ["{entry}"]\n')
+    with pytest.raises(ConfigError, match="allow entry|unknown rule ID"):
+        load_config(cfg)
+
+
+def test_unknown_top_level_key_raises(tmp_path: Path) -> None:
+    cfg = tmp_path / ".regdrift.toml"
+    cfg.write_text('allows = ["RD001"]\n')
+    with pytest.raises(ConfigError, match="unknown top-level key"):
+        load_config(cfg)
+
+
 def test_severity_overrides_parsed(tmp_path: Path) -> None:
     cfg = tmp_path / ".regdrift.toml"
     cfg.write_text('[severity]\nRD013 = "SAFE"\nRD010 = "BREAKING"\n')
@@ -63,5 +78,12 @@ def test_invalid_severity_value_raises(tmp_path: Path) -> None:
 def test_invalid_rule_id_raises(tmp_path: Path) -> None:
     cfg = tmp_path / ".regdrift.toml"
     cfg.write_text('[severity]\nNOTARULE = "SAFE"\n')
-    with pytest.raises(ConfigError, match="invalid rule ID"):
+    with pytest.raises(ConfigError, match="unknown rule ID"):
+        load_config(cfg)
+
+
+def test_unknown_well_formed_rule_id_raises(tmp_path: Path) -> None:
+    cfg = tmp_path / ".regdrift.toml"
+    cfg.write_text('[severity]\nRD999 = "SAFE"\n')
+    with pytest.raises(ConfigError, match="unknown rule ID"):
         load_config(cfg)

@@ -8,7 +8,7 @@ from pathlib import Path
 import click
 
 from regdrift import __version__
-from regdrift.config import ConfigError, load_config
+from regdrift.config import ConfigError, load_config, validate_allow_entries
 from regdrift.diff import diff_devices
 from regdrift.model import Cluster, Device, Register, device_to_dict
 from regdrift.parse import SvdParseError, parse_svd, parse_svd_string
@@ -115,6 +115,7 @@ def check(
     """
     try:
         config = load_config(config_path)
+        validate_allow_entries(allow_flags, "--allow")
         if old_svd == "-":
             old = parse_svd_string(sys.stdin.read())
         elif not Path(old_svd).exists():

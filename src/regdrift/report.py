@@ -9,7 +9,6 @@ from regdrift import __version__
 from regdrift.rules import BREAKING, SAFE, WARNING, Finding
 
 _HEX_ATTRS = frozenset({"address_offset", "base_address", "reset_value", "reset_mask"})
-_GITHUB_LEVEL = {BREAKING: "error", WARNING: "warning"}
 _MAX_ANNOTATIONS_PER_LEVEL = 9
 
 
@@ -171,20 +170,33 @@ def render_json(findings: list[Finding], meta: ReportMeta) -> str:
     return json.dumps(document, indent=2)
 
 
+def _escape_github_command(value: str, *, property_value: bool = False) -> str:
+    """Escape untrusted text for GitHub workflow command data and properties."""
+    escaped = value.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+    if property_value:
+        escaped = escaped.replace(":", "%3A").replace(",", "%2C")
+    return escaped
+
+
 def render_github(findings: list[Finding], meta: ReportMeta) -> str:
     lines: list[str] = []
+    file_property = _escape_github_command(meta.new_file, property_value=True)
     for severity, level in (("BREAKING", "error"), ("WARNING", "warning")):
         items = [f for f in findings if not f.allowed and f.severity == severity]
         shown = items[:_MAX_ANNOTATIONS_PER_LEVEL]
         for f in shown:
+            title = _escape_github_command(
+                f"{f.rule_id} {f.path}", property_value=True
+            )
+            message = _escape_github_command(f.message)
             lines.append(
-                f"::{level} file={meta.new_file},title={f.rule_id} {f.path}::{f.message}"
+                f"::{level} file={file_property},title={title}::{message}"
             )
         overflow = len(items) - len(shown)
         if overflow > 0:
             noun = "breaking" if level == "error" else "warning"
             lines.append(
-                f"::{level} file={meta.new_file},title=regdrift::"
+                f"::{level} file={file_property},title=regdrift::"
                 f"and {overflow} more {noun} findings - see the log or step summary"
             )
     return "\n".join(lines)

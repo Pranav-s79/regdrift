@@ -19,7 +19,7 @@ import pytest
 from regdrift.diff import diff_devices
 from regdrift.model import Cluster, Device, EnumeratedValue, Field, Register
 from regdrift.parse import parse_svd
-from regdrift.rules import classify_changes
+from regdrift.rules import RULE_IDS, classify_changes
 
 CORPUS = Path(__file__).parent / "corpus"
 FILES = ["nrf52.svd", "rp2040.svd", "MK64F12.svd"]
@@ -278,6 +278,7 @@ def test_every_rule_has_mutation_coverage() -> None:
     """Coverage gate: every rule ID published in RULES.md fires in this harness."""
     rulebook = set(re.findall(r"RD\d{3}", (Path(__file__).parent.parent / "RULES.md").read_text()))
     assert rulebook, "RULES.md defines no rule IDs?"
+    assert rulebook == RULE_IDS, "runtime rule catalog and RULES.md differ"
     device = _parse(FILES[0])
     covered = set()
     for mutate in MUTATIONS.values():

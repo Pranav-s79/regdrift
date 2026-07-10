@@ -20,38 +20,48 @@ inputs:
     description: "Post/update a sticky PR comment (true|false)"
     default: "true"
   version:
-    description: "regdrift version to install from PyPI; 'source' installs this checkout"
-    default: ""
+    description: "'source' installs this action checkout (default); otherwise install an exact PyPI version"
+    default: "source"
 runs:
   using: "composite"
   steps:
     - name: Install regdrift
       shell: bash
+      env:
+        REGDRIFT_VERSION: ${{ inputs.version }}
       run: |
-        if [ "${{ inputs.version }}" = "source" ]; then pip install "${{ github.action_path }}";
-        elif [ -n "${{ inputs.version }}" ]; then pip install "regdrift==${{ inputs.version }}";
+        if [ "$REGDRIFT_VERSION" = "source" ]; then pip install "$GITHUB_ACTION_PATH";
+        elif [ -n "$REGDRIFT_VERSION" ]; then pip install "regdrift==$REGDRIFT_VERSION";
         else pip install regdrift; fi
     - name: Extract base SVD
       id: base
       shell: bash
+      env:
+        REGDRIFT_BASE_REF: ${{ inputs.base-ref }}
+        REGDRIFT_EVENT_BASE_REF: ${{ github.base_ref }}
+        REGDRIFT_SVD_PATH: ${{ inputs.svd-path }}
       run: |
-        REF="${{ inputs.base-ref }}"
-        if [ -z "$REF" ] && [ -n "${{ github.base_ref }}" ]; then REF="origin/${{ github.base_ref }}"; fi
+        REF="$REGDRIFT_BASE_REF"
+        if [ -z "$REF" ] && [ -n "$REGDRIFT_EVENT_BASE_REF" ]; then REF="origin/$REGDRIFT_EVENT_BASE_REF"; fi
         if [ -z "$REF" ]; then REF="origin/main"; fi
-        if git show "$REF:${{ inputs.svd-path }}" > "$RUNNER_TEMP/base.svd" 2>/dev/null; then
+        if git show "${REF}:${REGDRIFT_SVD_PATH}" > "$RUNNER_TEMP/base.svd" 2>/dev/null; then
           echo "found=true" >> "$GITHUB_OUTPUT"
         else
-          echo "::notice::${{ inputs.svd-path }} does not exist at $REF - nothing to compare"
+          echo "::notice::Configured SVD path does not exist at the selected base ref - nothing to compare"
           echo "found=false" >> "$GITHUB_OUTPUT"
         fi
     - name: Run regdrift check
       id: check
       if: steps.base.outputs.found == 'true'
       shell: bash
+      env:
+        REGDRIFT_CONFIG: ${{ inputs.config }}
+        REGDRIFT_FAIL_ON: ${{ inputs.fail-on }}
+        REGDRIFT_SVD_PATH: ${{ inputs.svd-path }}
       run: |
         set +e
-        ARGS=("$RUNNER_TEMP/base.svd" "${{ inputs.svd-path }}" --fail-on "${{ inputs.fail-on }}")
-        if [ -n "${{ inputs.config }}" ]; then ARGS+=(--config "${{ inputs.config }}"); fi
+        ARGS=("$RUNNER_TEMP/base.svd" "$REGDRIFT_SVD_PATH" --fail-on "$REGDRIFT_FAIL_ON")
+        if [ -n "$REGDRIFT_CONFIG" ]; then ARGS+=(--config "$REGDRIFT_CONFIG"); fi
         regdrift check "${ARGS[@]}" --format github
         CODE=$?
         regdrift check "${ARGS[@]}" --format json > "$RUNNER_TEMP/regdrift.json" || true
@@ -82,4 +92,6 @@ runs:
     - name: Enforce verdict
       if: steps.base.outputs.found == 'true'
       shell: bash
-      run: exit "${{ steps.check.outputs.code }}"
+      env:
+        REGDRIFT_EXIT_CODE: ${{ steps.check.outputs.code }}
+      run: exit "$REGDRIFT_EXIT_CODE"

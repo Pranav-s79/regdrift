@@ -23,7 +23,6 @@ jobs:
         with:
           svd-path: selftest_chip.svd
           base-ref: HEAD
-          version: source
           comment: "false"
       - name: Assert the gate failed as intended
         run: |

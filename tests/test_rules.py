@@ -12,6 +12,11 @@ def _one(change: Change, allow: list[str] | None = None) -> tuple[str, str]:
     return findings[0].rule_id, findings[0].severity
 
 
+def test_invalid_allow_entry_is_rejected() -> None:
+    with pytest.raises(ValueError, match="invalid allow entry"):
+        classify_changes([], allow=["RD999"])
+
+
 @pytest.mark.parametrize(
     ("change", "rule_id", "severity"),
     [

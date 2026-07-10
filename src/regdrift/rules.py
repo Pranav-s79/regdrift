@@ -14,6 +14,33 @@ WARNING = "WARNING"
 SAFE = "SAFE"
 ALLOWED = "ALLOWED"
 
+RULE_IDS = frozenset(
+    {
+        "RD001",
+        "RD002",
+        "RD003",
+        "RD004",
+        "RD005",
+        "RD006",
+        "RD007",
+        "RD008",
+        "RD009",
+        "RD010",
+        "RD011",
+        "RD012",
+        "RD013",
+        "RD014",
+        "RD015",
+        "RD016",
+        "RD017",
+        "RD018",
+        "RD020",
+        "RD021",
+        "RD022",
+        "RD030",
+    }
+)
+
 # access string -> capability set (RULES.md "Notes")
 _ACCESS_CAPS = {
     "read-only": frozenset({"read"}),
@@ -58,7 +85,11 @@ def classify_changes(
 
 def _parse_allow(entry: str) -> tuple[str, str | None]:
     rule, sep, path = entry.partition(":")
-    return rule.strip(), (path.strip() if sep else None)
+    rule = rule.strip()
+    normalized_path = path.strip() if sep else None
+    if rule not in RULE_IDS or (sep and not normalized_path):
+        raise ValueError(f"invalid allow entry: {entry!r}")
+    return rule, normalized_path
 
 
 def _allows(rule: str, path: str | None, finding: Finding) -> bool:

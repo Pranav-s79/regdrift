@@ -11,6 +11,9 @@ from click.testing import CliRunner
 
 from regdrift import __version__
 from regdrift.cli import main
+from regdrift.diff import Change
+from regdrift.report import ReportMeta, render_github
+from regdrift.rules import BREAKING, Finding
 
 OLD_XML = """<?xml version="1.0"?>
 <device>
@@ -58,6 +61,17 @@ NEW_XML = """<?xml version="1.0"?>
   </peripherals>
 </device>
 """
+
+
+def _github_property(value: object) -> str:
+    return (
+        str(value)
+        .replace("%", "%25")
+        .replace("\r", "%0D")
+        .replace("\n", "%0A")
+        .replace(":", "%3A")
+        .replace(",", "%2C")
+    )
 
 EXPECTED_TEXT = """BREAKING (1)
   RD007  peripheral SPI0 removed
@@ -206,12 +220,35 @@ def test_github_format(tmp_path: Path) -> None:
         main,
         ["check", str(old), str(new), "--allow", "RD001:UART0.CTRL", "--format", "github"],
     )
+    escaped_new = _github_property(new)
     expected = (
-        f"::error file={new},title=RD007 SPI0::peripheral SPI0 removed\n"
-        f"::warning file={new},title=RD010 UART0.DATA::"
+        f"::error file={escaped_new},title=RD007 SPI0::peripheral SPI0 removed\n"
+        f"::warning file={escaped_new},title=RD010 UART0.DATA::"
         "register UART0.DATA reset value changed 0x0 -> 0x5"
     )
     assert result.output.rstrip("\n") == expected
+
+
+def test_github_format_escapes_untrusted_workflow_command_text() -> None:
+    finding = Finding(
+        rule_id="RD002",
+        severity=BREAKING,
+        path="P:R,1\nINJECTED",
+        message="removed 100%\r\n::warning::injected",
+        change=Change("removed", "register", "P:R,1\nINJECTED"),
+    )
+    meta = ReportMeta(
+        old_file="old.svd",
+        new_file="candidate:name,100%.svd\nnext",
+        old_device="OLD",
+        new_device="NEW",
+        fail_on="breaking",
+    )
+    assert render_github([finding], meta) == (
+        "::error file=candidate%3Aname%2C100%25.svd%0Anext,"
+        "title=RD002 P%3AR%2C1%0AINJECTED::"
+        "removed 100%25%0D%0A::warning::injected"
+    )
 
 
 def test_github_format_overflow_caps_at_nine(tmp_path: Path) -> None:
@@ -256,7 +293,7 @@ def test_github_format_overflow_caps_at_nine(tmp_path: Path) -> None:
     error_lines = [line for line in lines if line.startswith("::error")]
     assert len(error_lines) == 10
     assert error_lines[-1] == (
-        f"::error file={new},title=regdrift::and 3 more breaking findings - "
+        f"::error file={_github_property(new)},title=regdrift::and 3 more breaking findings - "
         "see the log or step summary"
     )
 

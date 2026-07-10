@@ -1,9 +1,11 @@
 """Every parse error must carry an XPath-ish location pointing at the offending node."""
 
+from pathlib import Path
+
 import pytest
 
 from conftest import MakeDevice
-from regdrift.parse import SvdParseError, parse_svd_string
+from regdrift.parse import SvdParseError, parse_svd, parse_svd_string
 
 
 def _error(make_device: MakeDevice, peripherals: str) -> SvdParseError:
@@ -15,6 +17,21 @@ def _error(make_device: MakeDevice, peripherals: str) -> SvdParseError:
 def test_malformed_xml_reports_location() -> None:
     with pytest.raises(SvdParseError, match="malformed XML"):
         parse_svd_string("<device><name>X</name>")
+
+
+def test_unreadable_file_is_wrapped_as_parse_error(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    svd = tmp_path / "unreadable.svd"
+    svd.write_text("<device/>")
+
+    def fail_to_read(_path: str | Path) -> None:
+        raise OSError("permission denied")
+
+    monkeypatch.setattr("regdrift.parse.ET.parse", fail_to_read)
+    with pytest.raises(SvdParseError, match="cannot read SVD") as excinfo:
+        parse_svd(svd)
+    assert excinfo.value.location == str(svd)
 
 
 def test_wrong_root_element() -> None:

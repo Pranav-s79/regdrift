@@ -584,6 +584,8 @@ def parse_svd(path: str | Path) -> Device:
     """Parse an SVD file into the fully resolved canonical model."""
     try:
         tree = ET.parse(path)
+    except OSError as exc:
+        raise SvdParseError(f"cannot read SVD: {exc}", str(path)) from exc
     except ET.ParseError as exc:
         raise SvdParseError(f"malformed XML: {exc}", str(path)) from exc
     return _parse_root(tree.getroot())

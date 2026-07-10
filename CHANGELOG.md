@@ -17,8 +17,8 @@ First public alpha.
   detection, rename heuristic with stated confidence basis).
 - Published rulebook (RULES.md): 22 rules across BREAKING/WARNING/SAFE,
   including an explicit "What regdrift does not check (yet)" section.
-- `regdrift check` CI gate: exit codes 0/1/2, `--fail-on
-  {breaking,warning}`, stdin support for the base file.
+- `regdrift check` CI gate: exit codes 0/1/2, configurable `--fail-on`
+  threshold, and stdin support for the base file.
 - Allowlist (`.regdrift.toml` `allow` + `--allow`) and `[severity]`
   re-ranking; allowed findings never fail the gate.
 - Output formats: severity-ranked text report (SAFE rolled up behind
@@ -30,3 +30,12 @@ First public alpha.
 - Test suite: per-feature unit tests, 15-file real-vendor corpus with
   datasheet spot assertions, mutation harness with a rule-coverage
   gate, golden snapshots, byte-mutation fuzzing, perf floor.
+
+### Changed
+- Configuration validation fails explicitly on unknown keys, unpublished rule
+  IDs, malformed allow entries, and invalid severities.
+- The composite action installs its checked-out source by default and passes
+  user-controlled inputs to shell steps through quoted environment variables.
+- GitHub workflow annotations escape SVD-derived content and filesystem paths.
+- Unreadable SVD files produce the documented parser/tool error instead of an
+  uncaught operating-system exception.

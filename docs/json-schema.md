@@ -8,7 +8,7 @@ meaning; additions of new keys are not breaking. Current version: **1**.
 | --- | --- | --- |
 | `schema_version` | int | Always `1` for this document shape. |
 | `regdrift_version` | string | The regdrift release that produced the document. |
-| `old.file` / `new.file` | string | The paths exactly as passed on the command line (`-` for stdin). |
+| `old.file` / `new.file` | string | The CLI path labels (`-` for stdin); filesystem paths use the platform's native separators. |
 | `old.device` / `new.device` | string | The `<name>` of each parsed device. |
 | `summary.breaking` / `.warning` / `.safe` | int | Counts of unallowed findings per classified severity. |
 | `summary.allowed` | int | Findings suppressed by the allowlist (any severity). |
