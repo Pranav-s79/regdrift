@@ -1,0 +1,24 @@
+{
+  "name": "register moved",
+  "category": "controlled_mutation",
+  "vendor": "Microchip/Atmel",
+  "device": "ATSAML11E16A",
+  "old_source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/Atmel/ATSAML11E16A.svd",
+  "new_source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/Atmel/ATSAML11E16A.svd",
+  "source_commit": "c65f8551e57c770344d229dcaa0bf838fa29aff4",
+  "old_sha256": "ec339d65ce79cfbdd646661c938603d258164451c0039a279f7e9e79adf54072",
+  "new_sha256": "1074ce149aebf25e58e101dd4fa629102d3b73b9c89e7ee19a3f8b964cb91afc",
+  "mutation": "addressOffset + 4",
+  "target_path": "CTRLA",
+  "before": "0x0",
+  "after": "0x4",
+  "expected_exit_code": 1,
+  "expected_rules": [
+    "RD001"
+  ],
+  "expected_severities": [
+    "BREAKING"
+  ],
+  "strict": true,
+  "notes": ""
+}

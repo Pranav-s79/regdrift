@@ -1,0 +1,20 @@
+{
+  "name": "identity imxrt",
+  "category": "identity",
+  "vendor": "NXP",
+  "device": "MIMXRT1011",
+  "old_source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/NXP/MIMXRT1011.svd",
+  "new_source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/NXP/MIMXRT1011.svd",
+  "source_commit": "c65f8551e57c770344d229dcaa0bf838fa29aff4",
+  "old_sha256": "ec4ef0086fe0bf205a759ef7795a6b22356ce40d403b2a3950aeb4ff37a13125",
+  "new_sha256": "ec4ef0086fe0bf205a759ef7795a6b22356ce40d403b2a3950aeb4ff37a13125",
+  "mutation": "identity",
+  "target_path": "none",
+  "before": "identical",
+  "after": "identical",
+  "expected_exit_code": 0,
+  "expected_rules": [],
+  "expected_severities": [],
+  "strict": true,
+  "notes": ""
+}

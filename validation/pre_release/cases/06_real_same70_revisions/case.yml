@@ -1,0 +1,16 @@
+name: "real same70 revisions"
+category: "observational_real_revision"
+vendor: "Microchip/Atmel"
+device: "ATSAME70Q21 Rev A -> ATSAME70Q21 Rev B"
+old_source_url: "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/Atmel/ATSAME70Q21.svd"
+new_source_url: "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/Atmel/ATSAME70Q21B.svd"
+source_commit: "c65f8551e57c770344d229dcaa0bf838fa29aff4"
+mutation: "vendor_revision_pair"
+target_path: "none"
+before: "identical"
+after: "identical"
+expected_exit_code: null
+expected_rules: []
+expected_severities: []
+strict: false
+notes: "Observational real-world comparison. Record findings; do not hardcode pass/fail before review."

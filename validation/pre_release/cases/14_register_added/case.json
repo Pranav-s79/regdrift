@@ -1,0 +1,24 @@
+{
+  "name": "register added",
+  "category": "controlled_mutation",
+  "vendor": "Arm",
+  "device": "ARM Sample",
+  "old_source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/ARM_SAMPLE/ARM_Sample.svd",
+  "new_source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/ARM_SAMPLE/ARM_Sample.svd",
+  "source_commit": "c65f8551e57c770344d229dcaa0bf838fa29aff4",
+  "old_sha256": "53c08610efd8b629b7b32a31d4cdbe336c52dcf6edb5a01444bf9a4e34f8ed06",
+  "new_sha256": "aa5c38464ce98ad739f4181a151ecb397f604484414262b251b2e08afba3ea2e",
+  "mutation": "add one register",
+  "target_path": "CR_REGDRIFT_ADDED",
+  "before": "absent",
+  "after": "added at 0x1000",
+  "expected_exit_code": 0,
+  "expected_rules": [
+    "RD020"
+  ],
+  "expected_severities": [
+    "SAFE"
+  ],
+  "strict": true,
+  "notes": ""
+}

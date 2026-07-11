@@ -1,0 +1,16 @@
+name: "identity nrf52840"
+category: "identity"
+vendor: "Nordic Semiconductor"
+device: "nRF52840"
+old_source_url: "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/Nordic/nrf52840.svd"
+new_source_url: "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/Nordic/nrf52840.svd"
+source_commit: "c65f8551e57c770344d229dcaa0bf838fa29aff4"
+mutation: "identity"
+target_path: "none"
+before: "identical"
+after: "identical"
+expected_exit_code: 0
+expected_rules: []
+expected_severities: []
+strict: true
+notes: ""

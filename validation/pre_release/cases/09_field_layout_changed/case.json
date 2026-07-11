@@ -1,0 +1,24 @@
+{
+  "name": "field layout changed",
+  "category": "controlled_mutation",
+  "vendor": "Microchip/Atmel",
+  "device": "ATSAMD51J20A",
+  "old_source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/Atmel/ATSAMD51J20A.svd",
+  "new_source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/Atmel/ATSAMD51J20A.svd",
+  "source_commit": "c65f8551e57c770344d229dcaa0bf838fa29aff4",
+  "old_sha256": "32b4a55ea1dd0b2b49f47c506ea8d1dd3cd759e23841ff1a4ad5781ee89f9a16",
+  "new_sha256": "f284f01b0a59f32cceba5e8479b1ac9dc230a4149250f5ae19e6b00d5bdc5153",
+  "mutation": "move one field bit range",
+  "target_path": "SWRST",
+  "before": "0",
+  "after": "1",
+  "expected_exit_code": 1,
+  "expected_rules": [
+    "RD003"
+  ],
+  "expected_severities": [
+    "BREAKING"
+  ],
+  "strict": true,
+  "notes": ""
+}

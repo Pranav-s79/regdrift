@@ -24,6 +24,16 @@ env/
 # Test corpus: real vendor SVDs, fetched by scripts/fetch_corpus.py
 tests/corpus/
 
+# Pre-release validation: downloaded vendor SVDs and generated outputs
+# (the harness itself - scripts, case metadata, lock file - is tracked)
+validation/pre_release/_sources/
+validation/pre_release/cases/**/*.svd
+validation/pre_release/reports/
+
+# Local planning notes and agent state (not part of the release)
+blueprints/
+.claude/scheduled_tasks.lock
+
 # Secrets and credentials
 .env
 .env.*
