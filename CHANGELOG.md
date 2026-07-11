@@ -4,6 +4,30 @@ All notable changes to regdrift are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow
 [PEP 440](https://peps.python.org/pep-0440/) / semver intent.
 
+## [0.1.0a2] - 2026-07-11
+
+Post-publication documentation and repository polish. This release contains
+no changes to parser, diff, classification, rule, or compatibility behavior.
+
+### Changed
+- README and PyPI wording now describe the package as a published public
+  alpha instead of an unreleased one.
+- PyPI installation (`python -m pip install regdrift==0.1.0a2` /
+  `pipx install regdrift==0.1.0a2`) is the primary documented installation
+  path; source and editable development installs follow it.
+- The README GitHub Action example references `Pranav-s79/regdrift@v0.1.0a2`.
+- README badges now include the PyPI version, PyPI-derived Python support,
+  and the license, alongside the existing CI and Action self-test badges.
+- The maintainer release runbook reflects post-first-publication releases
+  (one-time PyPI trusted-publisher and environment setup are recorded as
+  done).
+
+### Removed
+- Internal agent and maintainer files from the public repository: duplicated
+  session-handoff skill definitions, the one-shot Codex validation prompt,
+  and sprint-0 planning records (name check, scaffold verification log).
+  Local `.claude/`, `.codex/`, and `.agents/` state is now gitignored.
+
 ## [0.1.0a1] - 2026-07-11
 
 First public alpha.

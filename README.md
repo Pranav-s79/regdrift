@@ -1,8 +1,10 @@
 # regdrift
 
+[![PyPI](https://img.shields.io/pypi/v/regdrift)](https://pypi.org/project/regdrift/)
+[![Python versions](https://img.shields.io/pypi/pyversions/regdrift)](https://pypi.org/project/regdrift/)
 [![CI](https://github.com/Pranav-s79/regdrift/actions/workflows/ci.yml/badge.svg)](https://github.com/Pranav-s79/regdrift/actions/workflows/ci.yml)
 [![Action self-test](https://github.com/Pranav-s79/regdrift/actions/workflows/action-selftest.yml/badge.svg)](https://github.com/Pranav-s79/regdrift/actions/workflows/action-selftest.yml)
-[![Python 3.11–3.12](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue.svg)](https://www.python.org/)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
 **regdrift is a compatibility gate for CMSIS-SVD register maps.** It compares
 two silicon descriptions, classifies every detected change as `BREAKING`,
@@ -12,7 +14,8 @@ A moved register can leave a driver compiling cleanly while every write lands
 at the wrong address. regdrift catches that change in the pull request, before
 it becomes a logic-analyzer debugging session.
 
-> **Status:** `0.1.0a1` is an unreleased public alpha. The implementation is
+> **Status:** `0.1.0a2` is a public alpha, published on
+> [PyPI](https://pypi.org/project/regdrift/). The implementation is
 > exercised against 15 pinned vendor SVDs, but the explicit limitations in
 > [RULES.md](RULES.md#what-regdrift-does-not-check-yet) still apply.
 
@@ -32,7 +35,19 @@ it becomes a logic-analyzer debugging session.
 
 ## Installation
 
-No PyPI release has been published yet. Install the current alpha from source:
+Install the current alpha from [PyPI](https://pypi.org/project/regdrift/):
+
+```sh
+python -m pip install regdrift==0.1.0a2
+```
+
+or, as an isolated CLI tool:
+
+```sh
+pipx install regdrift==0.1.0a2
+```
+
+To install from source instead:
 
 ```sh
 git clone https://github.com/Pranav-s79/regdrift.git
@@ -48,14 +63,6 @@ For development, install the editable package and validation tools instead:
 ```sh
 python -m pip install -e ".[dev]"
 python scripts/fetch_corpus.py
-```
-
-After a release is published, the standard installations will be:
-
-```sh
-python -m pip install regdrift
-# or
-pipx install regdrift
 ```
 
 ## Quick start with the synthetic data
@@ -177,7 +184,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: Pranav-s79/regdrift@v0.1.0a1
+      - uses: Pranav-s79/regdrift@v0.1.0a2
         with:
           svd-path: hardware/device.svd
           fail-on: breaking
@@ -185,7 +192,7 @@ jobs:
 
 The action installs the source at the selected action ref by default, so its
 runtime and action definition stay in sync. Set the optional `version` input to
-an exact published package version when a release is available. Disable the
+an exact published package version to install from PyPI instead. Disable the
 sticky comment with `comment: "false"` if the workflow only has read access.
 
 For a fully manual workflow, install the package and run:

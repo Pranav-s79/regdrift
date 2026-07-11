@@ -33,6 +33,15 @@ pytest
 - New parser features need a targeted unit test **and** must keep the whole
   vendor corpus parsing clean (`tests/test_corpus.py`).
 
+## Coding agents
+
+If you contribute with a coding agent, point it at
+[docs/agent-operating-model.md](docs/agent-operating-model.md) — the
+tool-neutral project map, architecture boundaries, and validation
+requirements. `CLAUDE.md` and `AGENTS.md` are thin adapters that reference
+it. Keep tool-local state (`.claude/`, `.codex/`, `.agents/`) out of
+commits; it is gitignored.
+
 ## Filing issues
 
 A failing `.svd` snippet (or a pointer to a public vendor file) plus the
