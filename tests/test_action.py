@@ -7,6 +7,7 @@ quoted env vars in, $GITHUB_OUTPUT and $RUNNER_TEMP/base.svd out.
 """
 
 import os
+import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -53,6 +54,39 @@ def _extract_base_block() -> str:
     blocks = [b for b in _shell_blocks(ACTION.read_text()) if "git show" in b]
     assert len(blocks) == 1, "expected exactly one Extract base SVD shell block"
     return blocks[0]
+
+
+# GitHub Marketplace rejects actions whose description exceeds this limit.
+MARKETPLACE_DESCRIPTION_LIMIT = 125
+MARKETPLACE_BRANDING_COLORS = {
+    "white",
+    "yellow",
+    "blue",
+    "green",
+    "orange",
+    "red",
+    "purple",
+    "gray-dark",
+}
+
+
+def _metadata_value(action: str, pattern: str) -> str:
+    match = re.search(pattern, action, flags=re.MULTILINE)
+    assert match is not None, f"action.yml is missing {pattern!r}"
+    return match.group(1)
+
+
+def test_action_marketplace_metadata_is_valid() -> None:
+    action = ACTION.read_text()
+    name = _metadata_value(action, r'^name: "(.*)"$')
+    description = _metadata_value(action, r'^description: "(.*)"$')
+    icon = _metadata_value(action, r'^  icon: "(.*)"$')
+    color = _metadata_value(action, r'^  color: "(.*)"$')
+    assert name == "regdrift check"
+    assert description.strip(), "Marketplace requires a non-empty description"
+    assert len(description) <= MARKETPLACE_DESCRIPTION_LIMIT, len(description)
+    assert icon == "cpu"
+    assert color in MARKETPLACE_BRANDING_COLORS
 
 
 def test_action_does_not_interpolate_inputs_into_shell_code() -> None:

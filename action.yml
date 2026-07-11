@@ -1,5 +1,5 @@
 name: "regdrift check"
-description: "Fail pull requests that break a CMSIS-SVD register map. Diffs the PR's SVD against the base ref and classifies every change against a published rulebook."
+description: "Detect breaking CMSIS-SVD register-map changes in pull requests."
 branding:
   icon: "cpu"
   color: "red"
