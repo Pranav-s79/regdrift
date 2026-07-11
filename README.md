@@ -14,7 +14,7 @@ A moved register can leave a driver compiling cleanly while every write lands
 at the wrong address. regdrift catches that change in the pull request, before
 it becomes a logic-analyzer debugging session.
 
-> **Status:** `0.1.0a2` is a public alpha, published on
+> **Status:** `0.1.0a3` is a public alpha, published on
 > [PyPI](https://pypi.org/project/regdrift/). The implementation is
 > exercised against 15 pinned vendor SVDs, but the explicit limitations in
 > [RULES.md](RULES.md#what-regdrift-does-not-check-yet) still apply.
@@ -38,13 +38,13 @@ it becomes a logic-analyzer debugging session.
 Install the current alpha from [PyPI](https://pypi.org/project/regdrift/):
 
 ```sh
-python -m pip install regdrift==0.1.0a2
+python -m pip install regdrift==0.1.0a3
 ```
 
 or, as an isolated CLI tool:
 
 ```sh
-pipx install regdrift==0.1.0a2
+pipx install regdrift==0.1.0a3
 ```
 
 To install from source instead:
@@ -184,7 +184,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: Pranav-s79/regdrift@v0.1.0a2
+      - uses: Pranav-s79/regdrift@v0.1.0a3
         with:
           svd-path: hardware/device.svd
           fail-on: breaking

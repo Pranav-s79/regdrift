@@ -4,6 +4,21 @@ All notable changes to regdrift are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow
 [PEP 440](https://peps.python.org/pep-0440/) / semver intent.
 
+## [0.1.0a3] - 2026-07-11
+
+GitHub Marketplace metadata fix. This release contains no parser, diff,
+CLI, rule, reporting, or compatibility-engine behavior changes.
+
+### Fixed
+- GitHub Marketplace metadata validation: shortened the root `action.yml`
+  description to a single sentence so it satisfies the Marketplace
+  description character limit.
+
+### Added
+- A test that locks the root `action.yml` Marketplace metadata: the
+  description must be present, non-empty, and at most 125 characters, and
+  the action name, branding icon, and branding color must stay valid.
+
 ## [0.1.0a2] - 2026-07-11
 
 Post-publication documentation and repository polish. This release contains
