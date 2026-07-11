@@ -4,11 +4,26 @@ on:
   push:
     tags: ["v*"]
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Verify the tag matches the package version
+        run: |
+          VERSION="$(sed -nE 's/^__version__ = "(.+)"$/\1/p' src/regdrift/__init__.py)"
+          if [ -z "$VERSION" ]; then
+            echo "::error::could not read __version__ from src/regdrift/__init__.py"
+            exit 1
+          fi
+          if [ "$GITHUB_REF_NAME" != "v${VERSION}" ]; then
+            echo "::error::tag does not match the package version - expected v${VERSION}"
+            echo "tag: $GITHUB_REF_NAME, package version: $VERSION" >&2
+            exit 1
+          fi
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

@@ -177,7 +177,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: Pranav-s79/regdrift@main
+      - uses: Pranav-s79/regdrift@v0.1.0a1
         with:
           svd-path: hardware/device.svd
           fail-on: breaking
