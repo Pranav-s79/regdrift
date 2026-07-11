@@ -32,7 +32,9 @@ validation/pre_release/reports/
 
 # Local planning notes and agent state (not part of the release)
 blueprints/
-.claude/scheduled_tasks.lock
+.claude/
+.codex/
+.agents/
 
 # Secrets and credentials
 .env
@@ -49,8 +51,6 @@ secrets.json
 AGENTS.override.md
 AGENTS.local.md
 CLAUDE.local.md
-.claude/settings.local.json
-.codex/*.local.*
 .regdrift.local.toml
 
 # Logs and temporary files
