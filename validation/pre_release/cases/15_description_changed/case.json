@@ -1,0 +1,24 @@
+{
+  "name": "description changed",
+  "category": "controlled_mutation",
+  "vendor": "Arm",
+  "device": "ARM Sample",
+  "old_source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/ARM_SAMPLE/ARM_Sample.svd",
+  "new_source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/ARM_SAMPLE/ARM_Sample.svd",
+  "source_commit": "c65f8551e57c770344d229dcaa0bf838fa29aff4",
+  "old_sha256": "53c08610efd8b629b7b32a31d4cdbe336c52dcf6edb5a01444bf9a4e34f8ed06",
+  "new_sha256": "21b97df69fdc029636b2ab113fef1194caa561cabd15712b79d3685f27b97524",
+  "mutation": "description text only",
+  "target_path": "CR",
+  "before": "Control Register",
+  "after": "Control Register [regdrift pre-release description-only mutation]",
+  "expected_exit_code": 0,
+  "expected_rules": [
+    "RD030"
+  ],
+  "expected_severities": [
+    "SAFE"
+  ],
+  "strict": true,
+  "notes": ""
+}

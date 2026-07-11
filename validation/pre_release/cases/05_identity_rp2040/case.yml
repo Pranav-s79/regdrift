@@ -1,0 +1,16 @@
+name: "identity rp2040"
+category: "identity"
+vendor: "Raspberry Pi"
+device: "RP2040"
+old_source_url: "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/RaspberryPi/rp2040.svd"
+new_source_url: "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/RaspberryPi/rp2040.svd"
+source_commit: "c65f8551e57c770344d229dcaa0bf838fa29aff4"
+mutation: "identity"
+target_path: "none"
+before: "identical"
+after: "identical"
+expected_exit_code: 0
+expected_rules: []
+expected_severities: []
+strict: true
+notes: ""

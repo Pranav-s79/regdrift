@@ -4,7 +4,9 @@ All notable changes to regdrift are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow
 [PEP 440](https://peps.python.org/pep-0440/) / semver intent.
 
-## [0.1.0a1] - unreleased
+## [0.1.0a1] - YYYY-MM-DD
+<!-- Release-date placeholder: replace YYYY-MM-DD with the actual date in the
+     release PR (docs/release-checklist.md). Do not tag while this remains. -->
 
 First public alpha.
 

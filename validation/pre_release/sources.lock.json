@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "key": "arm_sample",
+      "vendor": "Arm",
+      "device": "ARM Sample",
+      "source_path": "ARM_SAMPLE/ARM_Sample.svd",
+      "source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/ARM_SAMPLE/ARM_Sample.svd",
+      "source_commit": "c65f8551e57c770344d229dcaa0bf838fa29aff4",
+      "filename": "ARM_Sample.svd",
+      "size_bytes": 30794,
+      "sha256": "53c08610efd8b629b7b32a31d4cdbe336c52dcf6edb5a01444bf9a4e34f8ed06",
+      "license_note": "Review ARM_SAMPLE vendor notices before redistribution."
+    },
+    {
+      "key": "stm32f407",
+      "vendor": "STMicroelectronics",
+      "device": "STM32F407",
+      "source_path": "STMicro/STM32F407.svd",
+      "source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/STMicro/STM32F407.svd",
+      "source_commit": "c65f8551e57c770344d229dcaa0bf838fa29aff4",
+      "filename": "STM32F407.svd",
+      "size_bytes": 2164866,
+      "sha256": "e2afca4f03f654225886d8508551cb7ac8f3c95ee28f18953aad466ecb56e6d6",
+      "license_note": "Review data/STMicro licensing before redistribution."
+    },
+    {
+      "key": "stm32h743",
+      "vendor": "STMicroelectronics",
+      "device": "STM32H743x",
+      "source_path": "STMicro/STM32H743x.svd",
+      "source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/STMicro/STM32H743x.svd",
+      "source_commit": "c65f8551e57c770344d229dcaa0bf838fa29aff4",
+      "filename": "STM32H743x.svd",
+      "size_bytes": 3941311,
+      "sha256": "0f1be8e6cce6ab944ff21c10beeb168ac4d50dc9fd11a67cf47eae7402d86503",
+      "license_note": "Review data/STMicro licensing before redistribution."
+    },
+    {
+      "key": "nrf52840",
+      "vendor": "Nordic Semiconductor",
+      "device": "nRF52840",
+      "source_path": "Nordic/nrf52840.svd",
+      "source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/Nordic/nrf52840.svd",
+      "source_commit": "c65f8551e57c770344d229dcaa0bf838fa29aff4",
+      "filename": "nrf52840.svd",
+      "size_bytes": 2149489,
+      "sha256": "058bce5cc7167edbd2372f33387eeb4e4e08b147a3ff1e2c8ec56bccdda2ba92",
+      "license_note": "Review data/Nordic licensing before redistribution."
+    },
+    {
+      "key": "lpc176x5x",
+      "vendor": "NXP",
+      "device": "LPC176x5x",
+      "source_path": "NXP/LPC176x5x_v0.2.svd",
+      "source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/NXP/LPC176x5x_v0.2.svd",
+      "source_commit": "c65f8551e57c770344d229dcaa0bf838fa29aff4",
+      "filename": "LPC176x5x_v0.2.svd",
+      "size_bytes": 1359117,
+      "sha256": "bbb381ef634d6a95789c21900ca61a2237e5fabc411a5b1ec7aa67621efed096",
+      "license_note": "Review data/NXP licensing before redistribution."
+    },
+    {
+      "key": "mimxrt1011",
+      "vendor": "NXP",
+      "device": "MIMXRT1011",
+      "source_path": "NXP/MIMXRT1011.svd",
+      "source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/NXP/MIMXRT1011.svd",
+      "source_commit": "c65f8551e57c770344d229dcaa0bf838fa29aff4",
+      "filename": "MIMXRT1011.svd",
+      "size_bytes": 4651650,
+      "sha256": "ec4ef0086fe0bf205a759ef7795a6b22356ce40d403b2a3950aeb4ff37a13125",
+      "license_note": "Review data/NXP licensing before redistribution."
+    },
+    {
+      "key": "rp2040",
+      "vendor": "Raspberry Pi",
+      "device": "RP2040",
+      "source_path": "RaspberryPi/rp2040.svd",
+      "source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/RaspberryPi/rp2040.svd",
+      "source_commit": "c65f8551e57c770344d229dcaa0bf838fa29aff4",
+      "filename": "rp2040.svd",
+      "size_bytes": 1664177,
+      "sha256": "e313ae5c39f713ced416fb216363f16d2e7adc5958fdc4405e0ef4948253f216",
+      "license_note": "Review data/RaspberryPi licensing before redistribution."
+    },
+    {
+      "key": "saml11",
+      "vendor": "Microchip/Atmel",
+      "device": "ATSAML11E16A",
+      "source_path": "Atmel/ATSAML11E16A.svd",
+      "source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/Atmel/ATSAML11E16A.svd",
+      "source_commit": "c65f8551e57c770344d229dcaa0bf838fa29aff4",
+      "filename": "ATSAML11E16A.svd",
+      "size_bytes": 989158,
+      "sha256": "ec339d65ce79cfbdd646661c938603d258164451c0039a279f7e9e79adf54072",
+      "license_note": "The Atmel repository README identifies current DFP files as Apache-2.0; verify the file header."
+    },
+    {
+      "key": "samd51",
+      "vendor": "Microchip/Atmel",
+      "device": "ATSAMD51J20A",
+      "source_path": "Atmel/ATSAMD51J20A.svd",
+      "source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/Atmel/ATSAMD51J20A.svd",
+      "source_commit": "c65f8551e57c770344d229dcaa0bf838fa29aff4",
+      "filename": "ATSAMD51J20A.svd",
+      "size_bytes": 1813433,
+      "sha256": "32b4a55ea1dd0b2b49f47c506ea8d1dd3cd759e23841ff1a4ad5781ee89f9a16",
+      "license_note": "The Atmel repository README identifies current DFP files as Apache-2.0; verify the file header."
+    },
+    {
+      "key": "same70a",
+      "vendor": "Microchip/Atmel",
+      "device": "ATSAME70Q21 Rev A",
+      "source_path": "Atmel/ATSAME70Q21.svd",
+      "source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/Atmel/ATSAME70Q21.svd",
+      "source_commit": "c65f8551e57c770344d229dcaa0bf838fa29aff4",
+      "filename": "ATSAME70Q21.svd",
+      "size_bytes": 2299128,
+      "sha256": "880b17f6f623fea2c22f97bc2188be91f2ba056084703f8c5baba89bf6c44a01",
+      "license_note": "Deprecated revision; verify the file header and vendor notice."
+    },
+    {
+      "key": "same70b",
+      "vendor": "Microchip/Atmel",
+      "device": "ATSAME70Q21 Rev B",
+      "source_path": "Atmel/ATSAME70Q21B.svd",
+      "source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/Atmel/ATSAME70Q21B.svd",
+      "source_commit": "c65f8551e57c770344d229dcaa0bf838fa29aff4",
+      "filename": "ATSAME70Q21B.svd",
+      "size_bytes": 2524505,
+      "sha256": "f2d56dca345882f271f8e01c24dfe61e7e33dc5102f3be4842c7bd9d2f2a384b",
+      "license_note": "The Atmel repository README identifies current DFP files as Apache-2.0; verify the file header."
+    }
+  ]
+}

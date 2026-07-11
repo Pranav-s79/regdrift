@@ -44,10 +44,17 @@ runs:
         REF="$REGDRIFT_BASE_REF"
         if [ -z "$REF" ] && [ -n "$REGDRIFT_EVENT_BASE_REF" ]; then REF="origin/$REGDRIFT_EVENT_BASE_REF"; fi
         if [ -z "$REF" ]; then REF="origin/main"; fi
+        # An unresolvable ref is a workflow error, never a clean pass: it usually
+        # means a shallow checkout (missing fetch-depth: 0) or a mistyped base-ref.
+        if ! git rev-parse --verify --quiet --end-of-options "${REF}^{commit}" > /dev/null; then
+          echo "::error::The base ref cannot be resolved to a commit - check out full history (fetch-depth: 0) or set the base-ref input to an existing ref"
+          echo "unresolvable base ref: $REF" >&2
+          exit 1
+        fi
         if git show "${REF}:${REGDRIFT_SVD_PATH}" > "$RUNNER_TEMP/base.svd" 2>/dev/null; then
           echo "found=true" >> "$GITHUB_OUTPUT"
         else
-          echo "::notice::Configured SVD path does not exist at the selected base ref - nothing to compare"
+          echo "::notice::Configured SVD path does not exist at the base ref - nothing to compare (newly introduced file)"
           echo "found=false" >> "$GITHUB_OUTPUT"
         fi
     - name: Run regdrift check

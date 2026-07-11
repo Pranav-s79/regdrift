@@ -1,0 +1,20 @@
+{
+  "name": "real same70 revisions",
+  "category": "observational_real_revision",
+  "vendor": "Microchip/Atmel",
+  "device": "ATSAME70Q21 Rev A -> ATSAME70Q21 Rev B",
+  "old_source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/Atmel/ATSAME70Q21.svd",
+  "new_source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/Atmel/ATSAME70Q21B.svd",
+  "source_commit": "c65f8551e57c770344d229dcaa0bf838fa29aff4",
+  "old_sha256": "880b17f6f623fea2c22f97bc2188be91f2ba056084703f8c5baba89bf6c44a01",
+  "new_sha256": "f2d56dca345882f271f8e01c24dfe61e7e33dc5102f3be4842c7bd9d2f2a384b",
+  "mutation": "vendor_revision_pair",
+  "target_path": "none",
+  "before": "identical",
+  "after": "identical",
+  "expected_exit_code": null,
+  "expected_rules": [],
+  "expected_severities": [],
+  "strict": false,
+  "notes": "Observational real-world comparison. Record findings; do not hardcode pass/fail before review."
+}

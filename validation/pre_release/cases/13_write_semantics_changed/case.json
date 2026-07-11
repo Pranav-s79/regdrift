@@ -1,0 +1,24 @@
+{
+  "name": "write semantics changed",
+  "category": "controlled_mutation",
+  "vendor": "STMicroelectronics",
+  "device": "STM32F407",
+  "old_source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/STMicro/STM32F407.svd",
+  "new_source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/STMicro/STM32F407.svd",
+  "source_commit": "c65f8551e57c770344d229dcaa0bf838fa29aff4",
+  "old_sha256": "e2afca4f03f654225886d8508551cb7ac8f3c95ee28f18953aad466ecb56e6d6",
+  "new_sha256": "0576d7b20ba4700541d846bb113e4855cb0bd57acafd29bffb623ac0eba1afa6",
+  "mutation": "toggle modifiedWriteValues",
+  "target_path": "IE",
+  "before": "modify/default",
+  "after": "oneToClear",
+  "expected_exit_code": 1,
+  "expected_rules": [
+    "RD017"
+  ],
+  "expected_severities": [
+    "BREAKING"
+  ],
+  "strict": true,
+  "notes": ""
+}

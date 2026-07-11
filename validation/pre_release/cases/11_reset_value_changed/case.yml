@@ -1,0 +1,16 @@
+name: "reset value changed"
+category: "controlled_mutation"
+vendor: "NXP"
+device: "LPC176x5x"
+old_source_url: "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/NXP/LPC176x5x_v0.2.svd"
+new_source_url: "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/NXP/LPC176x5x_v0.2.svd"
+source_commit: "c65f8551e57c770344d229dcaa0bf838fa29aff4"
+mutation: "flip one reset-value bit"
+target_path: "MOD"
+before: "0"
+after: "1"
+expected_exit_code: 0
+expected_rules: ["RD010"]
+expected_severities: ["WARNING"]
+strict: true
+notes: "Default fail threshold is BREAKING, so a warning should return exit 0; --fail-on warning should return exit 1."

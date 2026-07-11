@@ -1,0 +1,16 @@
+name: "interrupt renumbered"
+category: "controlled_mutation"
+vendor: "Nordic Semiconductor"
+device: "nRF52840"
+old_source_url: "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/Nordic/nrf52840.svd"
+new_source_url: "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/Nordic/nrf52840.svd"
+source_commit: "c65f8551e57c770344d229dcaa0bf838fa29aff4"
+mutation: "IRQ value + 1"
+target_path: "POWER_CLOCK"
+before: "0"
+after: "1"
+expected_exit_code: 1
+expected_rules: ["RD015"]
+expected_severities: ["BREAKING"]
+strict: true
+notes: ""

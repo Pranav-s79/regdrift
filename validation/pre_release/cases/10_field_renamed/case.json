@@ -1,0 +1,24 @@
+{
+  "name": "field renamed",
+  "category": "controlled_mutation",
+  "vendor": "STMicroelectronics",
+  "device": "STM32F407",
+  "old_source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/STMicro/STM32F407.svd",
+  "new_source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/STMicro/STM32F407.svd",
+  "source_commit": "c65f8551e57c770344d229dcaa0bf838fa29aff4",
+  "old_sha256": "e2afca4f03f654225886d8508551cb7ac8f3c95ee28f18953aad466ecb56e6d6",
+  "new_sha256": "97a7b49e1f98293caa697993469fa1a59162c17d780f28ead10c70958146cc1d",
+  "mutation": "rename one field",
+  "target_path": "IE_REGDRIFT_RENAMED",
+  "before": "IE",
+  "after": "IE_REGDRIFT_RENAMED",
+  "expected_exit_code": 1,
+  "expected_rules": [
+    "RD005"
+  ],
+  "expected_severities": [
+    "BREAKING"
+  ],
+  "strict": true,
+  "notes": ""
+}

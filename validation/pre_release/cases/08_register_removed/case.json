@@ -1,0 +1,24 @@
+{
+  "name": "register removed",
+  "category": "controlled_mutation",
+  "vendor": "Microchip/Atmel",
+  "device": "ATSAML11E16A",
+  "old_source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/Atmel/ATSAML11E16A.svd",
+  "new_source_url": "https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/c65f8551e57c770344d229dcaa0bf838fa29aff4/data/Atmel/ATSAML11E16A.svd",
+  "source_commit": "c65f8551e57c770344d229dcaa0bf838fa29aff4",
+  "old_sha256": "ec339d65ce79cfbdd646661c938603d258164451c0039a279f7e9e79adf54072",
+  "new_sha256": "3f82cd6cafd2cc13f9455229d25af20add2df111eccb2b130b3f1b20253d34a5",
+  "mutation": "remove one explicit register",
+  "target_path": "CTRLA",
+  "before": "present",
+  "after": "removed",
+  "expected_exit_code": 1,
+  "expected_rules": [
+    "RD002"
+  ],
+  "expected_severities": [
+    "BREAKING"
+  ],
+  "strict": true,
+  "notes": ""
+}
